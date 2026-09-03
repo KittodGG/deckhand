@@ -1,7 +1,7 @@
 {
   "name": "deckhand",
   "description": "Turn real git history into a self-contained HTML presentation deck. Asks scope, audience, and language first, writes semi-technical narrative that managers understand, renders it in an editorial/Linear style with purpose-built SVG visuals.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Citia Engineering",
     "url": "https://github.com/KittodGG"
