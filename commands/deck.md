@@ -1,5 +1,5 @@
 ---
-description: Build an HTML progress-update presentation from real git history
+description: "START HERE. Builds the whole deck: reads real git history, asks scope + audience + language first, writes semi-technical copy, draws its own SVG diagrams. Use /deckhand:deck-svg only for a standalone diagram."
 argument-hint: "[optional: 20 commits | since 2026-08-01 | repo path]"
 ---
 

@@ -1,13 +1,15 @@
 ---
 name: deckhand
 description: >
-  Build a self-contained HTML presentation deck about what changed in a codebase:
-  development progress updates, sprint reviews, demo days, stakeholder briefings,
-  client check-ins. Reads real git history (last N commits, or everything since a
-  date), turns it into semi-technical narrative that non-engineers can follow, and
-  renders it in an editorial / Linear style with Manrope + Playfair Display,
-  colors pulled from the project itself, and SVG visuals only where a picture
-  beats a sentence.
+  The engine behind /deckhand:deck; run that command instead unless you want the
+  workflow without its extra guardrails. Builds a self-contained HTML deck about
+  what changed in a codebase: progress updates, sprint reviews, demo days,
+  stakeholder briefings, client check-ins. Asks scope, audience, and language
+  first, reads real git history (last N commits or since a date), turns it into
+  semi-technical narrative non-engineers can follow, runs an anti-AI-slop pass,
+  and renders it in an editorial / Linear style with Manrope + Playfair Display
+  and colors pulled from the project. Draws its own inline SVG diagrams where a
+  picture beats a sentence, so no separate diagram skill is needed for a deck.
   Trigger on /deck, "buatkan presentasi update", "presentasi progress", "slide
   deck of what changed", "progress deck", "sprint review slides", "demo deck",
   "presentation for management about this release".

@@ -1,13 +1,14 @@
 ---
 name: deck-svg
 description: >
-  Hand-author a professional inline SVG diagram: architecture and data flow,
-  before/after comparison, timeline, pipeline with drop-off, state machine, or a
-  small chart. Static or animated, theme-aware through CSS variables, no chart
-  library and no external assets. Use when someone asks for a diagram, a
-  visualization, "gambarkan alurnya", "bikin diagram", "visualize this
-  architecture", "buatkan SVG", or when a slide, README, or doc would be clearer
-  with a drawing than with a paragraph.
+  Standalone diagram only; a deck built by /deckhand:deck already draws its own,
+  so reach for this when there is no deck involved. Hand-authors one professional
+  inline SVG: architecture and data flow, before/after comparison, timeline,
+  pipeline with drop-off, state machine, or a small chart. Static or animated,
+  theme-aware through CSS variables, no chart library and no external assets. Use
+  when someone asks for a diagram, a visualization, "gambarkan alurnya", "bikin
+  diagram", "visualize this architecture", "buatkan SVG", or when a README, doc,
+  or existing slide would be clearer with a drawing than with a paragraph.
 ---
 
 # deck-svg

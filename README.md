@@ -50,6 +50,19 @@ The skill also triggers on plain requests: "buatkan presentasi update sprint
 ini", "make a progress deck for the client", "slide deck of what changed since
 July".
 
+## Which entry point
+
+The plugin exposes three names. Only the first is the one you normally type.
+
+| Entry | What it is | When |
+|---|---|---|
+| `/deckhand:deck` | the command, and the whole job: git history, intake, copy, **SVG diagrams**, verification | building a deck |
+| `/deckhand:deckhand` | the skill the command drives, minus the command's extra guardrails | rarely typed; fires on its own from plain requests like "bikin presentasi update sprint ini" |
+| `/deckhand:deck-svg` | one standalone diagram, no deck around it | a picture for a README, a doc, or a slide that already exists |
+
+A deck already contains its diagrams. `deck-svg` exists for the times you want a
+drawing and nothing else.
+
 ## What ships in the box
 
 | Path | What it is |
