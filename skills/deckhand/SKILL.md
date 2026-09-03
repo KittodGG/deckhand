@@ -100,10 +100,19 @@ Default arc, stretch or trim as the material demands (no slide limit):
 2. The one-paragraph version — what changed, in five lines
 3. Numbers that are actually true — commits, files, features shipped, period
 4. One theme per section: what it does, why it mattered, what it took
-5. What broke and how it was handled, when there was something
-6. What is still open — honest, dated, no "coming soon" vapor
-7. Next period's focus
-8. Close — one ask or one decision needed from the room
+5. The change list — every shipped item, one line each, grouped by kind
+6. What broke and how it was handled, when there was something
+7. What is still open — honest, dated, no "coming soon" vapor
+8. Next period's focus
+9. Close — one ask or one decision needed from the room
+
+**Keep display slides rare.** A slide that is one big typographic statement is
+worth at most one per deck, and only where it earns the pause: a section break
+before a long stretch, or the single number the whole update turns on. In a
+progress deck those slides are the ones people tune out on, so the default is
+information. Every slide should carry something a listener could repeat back
+afterwards. When in doubt, add a row to the change list instead of adding a
+slide.
 
 ## Step 5 — Write the copy
 

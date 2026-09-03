@@ -64,8 +64,13 @@ one. Like that.
 
 Same for paragraphs and for slides. If every slide has a title, a lead, and
 exactly three bullets, the deck reads as generated no matter how good the
-sentences are. Let one slide be a single sentence at 60px. Let another be a
-diagram with one caption.
+sentences are. Vary the shape instead: one slide a dense change list, another a
+diagram with one caption, another two numbers and a sentence.
+
+Vary the shape, not the substance. A slide that is one big sentence and nothing
+else is a typographic exercise, so keep it to one per deck at most, and give
+even that one a real fact to stand on. Everything else carries information
+someone could repeat back afterwards.
 
 ## Specificity
 

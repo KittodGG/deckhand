@@ -152,6 +152,22 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
 .card h3{margin:.1rem 0 .5rem;font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
 .card p{font-size:.95rem;margin:0}
 
+/* ledger: the change list, two columns, one real change per row */
+.ledger{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:clamp(2rem,4vw,3.5rem);
+}
+@media (max-width:900px){.ledger{grid-template-columns:1fr}}
+.ledger .row{
+  display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:baseline;
+  padding:.85rem 0;border-top:1px solid var(--line);
+}
+.row__tag{
+  font:700 .66rem/1 inherit;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);min-width:74px;
+}
+.row__t{margin:0;font-size:clamp(.9rem,1.15vw,1rem);line-height:1.45;max-width:44ch}
+
 /* risk / status line */
 .status{display:flex;align-items:baseline;gap:.7rem;padding:1rem 0;border-top:1px solid var(--line)}
 .status__tag{font:700 .72rem/1 inherit;letter-spacing:.1em;text-transform:uppercase;flex:none;min-width:88px}
@@ -375,14 +391,37 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
   </div>
 </section>
 
-<!-- ════════ SLIDE 5 — A SLIDE THAT IS JUST ONE SENTENCE ════════
-     Uneven slide weight is what stops the deck reading as generated. -->
-<section class="slide" data-title="Kutipan">
+<!-- ════════ SLIDE 5 — THE ITEM LIST ════════
+     Every row is a real change with a real effect. Two columns so more fits
+     without shrinking the type. Add rows or split into two slides as needed. -->
+<section class="slide" data-title="Rincian perubahan">
   <div class="slide__inner">
-    <h2 class="title reveal" style="max-width:18ch">Satu kalimat yang <span class="ed ed--accent">layak</span> berdiri sendiri. 🔥</h2>
-    <p class="meta reveal">{{ATTRIBUTION_OR_CONTEXT}}</p>
+    <p class="kicker reveal">Rincian</p>
+    <h2 class="title reveal" style="margin-bottom:1.8rem">{{DETAIL_TITLE}}</h2>
+    <div class="ledger">
+      <div class="row reveal"><span class="row__tag">Fitur</span><p class="row__t">{{ITEM_1}}</p></div>
+      <div class="row reveal"><span class="row__tag">Fitur</span><p class="row__t">{{ITEM_2}}</p></div>
+      <div class="row reveal"><span class="row__tag">Performa</span><p class="row__t">{{ITEM_3}}</p></div>
+      <div class="row reveal"><span class="row__tag">Perbaikan</span><p class="row__t">{{ITEM_4}}</p></div>
+      <div class="row reveal"><span class="row__tag">Perbaikan</span><p class="row__t">{{ITEM_5}}</p></div>
+      <div class="row reveal"><span class="row__tag">Data</span><p class="row__t">{{ITEM_6}}</p></div>
+    </div>
   </div>
 </section>
+
+<!-- ════════ OPTIONAL DISPLAY SLIDE ════════
+     One per deck, no more. Use it as a section break or on the single number
+     the whole update turns on, and keep a real fact in it. Delete this block
+     if the deck does not need a pause.
+
+<section class="slide" data-title="Angka kunci">
+  <div class="slide__inner">
+    <p class="kicker reveal">{{DISPLAY_KICKER}}</p>
+    <h2 class="title reveal" style="max-width:20ch">{{DISPLAY_FACT}}</h2>
+    <p class="meta reveal">{{HOW_IT_WAS_MEASURED}}</p>
+  </div>
+</section>
+-->
 
 <!-- ════════ SLIDE 6 — WHAT IS STILL OPEN ════════ -->
 <section class="slide" data-title="Yang masih terbuka">

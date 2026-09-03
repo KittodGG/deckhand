@@ -113,6 +113,10 @@ above the minimum.
 - Vertical rhythm in multiples of 8px.
 - Empty space is content. A slide that is 55% empty reads as confident. One that
   is 20% empty reads as a document nobody edited.
+- Big type is mostly a readability tool, not the content. A progress deck is
+  judged on what the room learned, so headline-only slides stay rare: one per
+  deck, at a section break or on the number the update turns on. Density belongs
+  on the change list, restraint around it.
 
 ## Components
 
