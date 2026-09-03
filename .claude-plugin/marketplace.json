@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "deckhand",
+  "description": "Presentation decks built from real commits. Editorial/Linear style, semi-technical copy, SVG visuals that earn their place.",
+  "owner": {
+    "name": "Citia Engineering",
+    "url": "https://github.com/KittodGG"
+  },
+  "plugins": [
+    {
+      "name": "deckhand",
+      "description": "Build an HTML progress-update deck from the last N commits or from a date. Always asks scope, audience, and language before writing.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

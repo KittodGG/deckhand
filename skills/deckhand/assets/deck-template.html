@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT}} — Update {{PERIOD}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   1. TOKENS — swap --accent for the project color,
+   --counter for a color the project does NOT use.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --ground:#f6f5f3; --surface:#ffffff;
+  --ink:#12110f; --ink-soft:#4a4842; --muted:#6b6862;
+  --line:rgba(18,17,15,.10); --line-strong:rgba(18,17,15,.18);
+  --accent:#00a9b4; --accent-soft:rgba(0,169,180,.12);
+  --counter:#c2532f; --counter-soft:rgba(194,83,47,.12);
+  --ok:#2f7d4f; --warn:#b7791f; --bad:#c0392b;
+  --r-pill:999px; --r-card:18px;
+  --pad-x:clamp(3rem,7vw,7rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.55; overflow:hidden;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{background:var(--accent-soft)}
+
+/* ─────────────────────────────────────────────────────────────
+   2. SHELL — progress rail, HUD, slide stage
+   ───────────────────────────────────────────────────────────── */
+.rail{position:fixed;inset:0 0 auto 0;height:2px;background:var(--line);z-index:60}
+.rail__fill{height:100%;width:0;background:var(--accent);transition:width .45s var(--ease)}
+
+.hud{
+  position:fixed;inset:0 0 auto 0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.5rem var(--pad-x) 0;pointer-events:none;
+}
+.hud>*{pointer-events:auto}
+.hud__right{display:flex;gap:.5rem;align-items:center}
+
+.pill{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.42rem .95rem;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.55);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  backdrop-filter:blur(14px) saturate(140%);
+  font:600 .82rem/1.2 inherit;letter-spacing:.01em;color:var(--ink-soft);
+  box-shadow:0 1px 2px rgba(18,17,15,.04),0 8px 24px rgba(18,17,15,.05);
+}
+button.pill{cursor:pointer;font-family:inherit}
+button.pill:hover{border-color:var(--line-strong);color:var(--ink)}
+button.pill:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.pill--accent{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.pill--count{font-variant-numeric:tabular-nums;color:var(--muted)}
+.pill kbd{
+  font:600 .68rem/1 inherit;padding:.15rem .3rem;border-radius:5px;
+  background:var(--line);color:var(--muted)
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+
+/* inline media capsule that sits inside a headline */
+.pill--media{
+  padding:0;overflow:hidden;vertical-align:middle;
+  display:inline-block;height:.78em;aspect-ratio:2.2/1;
+  border-radius:var(--r-pill);border:1px solid var(--line);
+  transform:translateY(-.04em);
+}
+.pill--media img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.03)}
+
+/* ─────────────────────────────────────────────────────────────
+   3. SLIDES
+   ───────────────────────────────────────────────────────────── */
+#deck{position:relative;height:100%;width:100%}
+.slide{
+  position:absolute;inset:0;display:flex;align-items:center;
+  padding:5.5rem var(--pad-x) 4.5rem;
+  opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s;
+}
+.slide.is-active{opacity:1;visibility:visible}
+.slide__inner{width:100%;max-width:1180px;margin-inline:auto}
+.slide--center .slide__inner{text-align:left}
+
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(1.5rem,3vw,3rem);align-items:center}
+.col-7{grid-column:span 7}
+.col-5{grid-column:span 5}
+.col-8{grid-column:span 8}
+.col-4{grid-column:span 4}
+.col-12{grid-column:span 12}
+@media (max-width:900px){.col-7,.col-5,.col-8,.col-4{grid-column:span 12}}
+
+/* type */
+.kicker{
+  display:flex;align-items:center;gap:.6rem;
+  font:600 .78rem/1 inherit;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 1.4rem;
+}
+.kicker::after{content:"";height:1px;flex:1;max-width:180px;background:var(--line)}
+
+h1.hero{
+  font-size:clamp(3.2rem,8.5vw,7.5rem);font-weight:800;line-height:.95;
+  letter-spacing:-.045em;margin:0 0 1.6rem;text-wrap:balance;
+}
+h2.title{
+  font-size:clamp(2rem,4.4vw,3.6rem);font-weight:700;line-height:1.05;
+  letter-spacing:-.035em;margin:0 0 1.2rem;text-wrap:balance;
+}
+.ed{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em}
+.ed--accent{color:var(--accent)}
+.ed--counter{color:var(--counter)}
+
+.lead{font-size:clamp(1.05rem,1.7vw,1.45rem);line-height:1.5;color:var(--ink-soft);max-width:56ch;margin:0 0 1.6rem}
+p,li{font-size:clamp(.95rem,1.35vw,1.12rem);color:var(--ink-soft);max-width:62ch}
+strong{font-weight:700;color:var(--ink)}
+.meta{font:500 .8rem/1.4 inherit;letter-spacing:.02em;color:var(--muted)}
+
+/* sparkle */
+.spark{width:1em;height:1em;fill:currentColor;flex:none}
+.spark--accent{color:var(--accent)}
+
+/* bullet list, sparkle instead of a disc */
+ul.points{list-style:none;margin:0;padding:0;display:grid;gap:1.1rem}
+ul.points li{display:grid;grid-template-columns:auto 1fr;gap:.85rem;align-items:start;max-width:60ch}
+ul.points .spark{margin-top:.42em;font-size:.8em}
+
+/* stat row */
+.stats{display:flex;flex-wrap:wrap;gap:clamp(2rem,5vw,4.5rem);margin:2rem 0 0}
+.stat{border-top:1px solid var(--line);padding-top:.9rem;min-width:130px}
+.stat__n{
+  display:block;font-size:clamp(2.6rem,5vw,4.2rem);font-weight:800;line-height:1;
+  letter-spacing:-.04em;font-variant-numeric:tabular-nums;
+}
+.stat__n em{font-family:"Playfair Display",serif;font-style:italic;font-weight:500;font-size:.5em}
+.stat__l{display:block;margin-top:.5rem;font:500 .82rem/1.35 inherit;color:var(--muted);max-width:22ch}
+.stat--accent .stat__n{color:var(--accent)}
+.stat--counter .stat__n{color:var(--counter)}
+
+/* small card, used sparingly */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:1.5rem 1.6rem;box-shadow:0 1px 2px rgba(18,17,15,.04),0 12px 32px rgba(18,17,15,.05);
+}
+.card h3{margin:.1rem 0 .5rem;font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
+.card p{font-size:.95rem;margin:0}
+
+/* risk / status line */
+.status{display:flex;align-items:baseline;gap:.7rem;padding:1rem 0;border-top:1px solid var(--line)}
+.status__tag{font:700 .72rem/1 inherit;letter-spacing:.1em;text-transform:uppercase;flex:none;min-width:88px}
+.is-open .status__tag{color:var(--warn)} .is-blocked .status__tag{color:var(--bad)} .is-done .status__tag{color:var(--ok)}
+
+/* speaker notes: hidden on screen, printed */
+.notes{display:none}
+
+/* ─────────────────────────────────────────────────────────────
+   4. SVG
+   ───────────────────────────────────────────────────────────── */
+.viz{width:100%;height:auto;font-family:inherit;color:var(--muted)}
+.viz .node{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.viz .node--hot{stroke:var(--accent);stroke-width:2}
+.viz .node--cold{fill:var(--counter-soft);stroke:transparent}
+.viz .label{fill:var(--ink);font-size:13px;font-weight:600}
+.viz .sub{fill:var(--muted);font-size:11.5px;font-weight:500}
+.viz .flow{stroke:var(--line-strong);stroke-width:1.5;fill:none;marker-end:url(#arrow)}
+.viz .flow--hot{stroke:var(--accent)}
+.viz .bar{rx:6}
+.viz .axis{stroke:var(--line);stroke-width:1}
+
+/* ─────────────────────────────────────────────────────────────
+   5. MOTION
+   ───────────────────────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(12px)}
+.slide.is-active .reveal{
+  animation:rise .42s var(--ease) forwards;
+  animation-delay:calc(var(--i,0) * 60ms);
+}
+@keyframes rise{to{opacity:1;transform:none}}
+
+.slide.is-active .viz .flow{
+  stroke-dasharray:var(--len,900);stroke-dashoffset:var(--len,900);
+  animation:draw .9s var(--ease) .25s forwards;
+}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+.slide.is-active .viz .grow{
+  transform:scaleY(0);transform-origin:var(--origin,0 100%);
+  animation:grow .7s var(--ease) .3s forwards;
+}
+@keyframes grow{to{transform:scaleY(1)}}
+
+/* ─────────────────────────────────────────────────────────────
+   6. OVERVIEW
+   ───────────────────────────────────────────────────────────── */
+.overview{
+  position:fixed;inset:0;z-index:70;background:rgba(246,245,243,.92);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  padding:6rem var(--pad-x) 3rem;overflow:auto;
+}
+.overview h2{font:700 1.1rem/1 inherit;letter-spacing:-.02em;margin:0 0 1.8rem;color:var(--muted)}
+.overview__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem}
+.ov-card{
+  text-align:left;cursor:pointer;font-family:inherit;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:1.1rem 1.2rem;display:grid;gap:.55rem;min-height:112px;
+  transition:border-color .2s,transform .2s var(--ease);
+}
+.ov-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.ov-card[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.ov-card__n{font:600 .72rem/1 inherit;letter-spacing:.1em;color:var(--muted);font-variant-numeric:tabular-nums}
+.ov-card__t{font:700 .95rem/1.3 inherit;letter-spacing:-.01em;color:var(--ink)}
+
+/* ─────────────────────────────────────────────────────────────
+   7. PRINT — one landscape page per slide
+   ───────────────────────────────────────────────────────────── */
+@page{size:A4 landscape;margin:12mm}
+@media print{
+  body{overflow:visible;background:#fff}
+  .rail,.hud,.overview{display:none !important}
+  #deck{height:auto}
+  .slide{
+    position:static;opacity:1 !important;visibility:visible !important;
+    height:auto;min-height:170mm;padding:0 0 10mm;break-after:page;page-break-after:always;
+  }
+  .reveal{opacity:1 !important;transform:none !important;animation:none !important}
+  .viz .flow{stroke-dashoffset:0 !important;animation:none !important}
+  .notes{
+    display:block;margin-top:8mm;padding-top:4mm;border-top:1px solid var(--line);
+    font-size:9pt;color:var(--muted);max-width:none;
+  }
+  .card{box-shadow:none}
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8. REDUCED MOTION
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .reveal{opacity:1;transform:none}
+  .viz .flow{stroke-dashoffset:0 !important}
+  .viz .grow{transform:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="rail"><div class="rail__fill" id="rail"></div></div>
+
+<header class="hud">
+  <span class="pill"><span class="dot"></span>{{PRODUCT}}</span>
+  <nav class="hud__right">
+    <button class="pill" id="btnOverview" type="button">Ikhtisar <kbd>O</kbd></button>
+    <span class="pill pill--count"><span id="cur">1</span> / <span id="tot">1</span></span>
+  </nav>
+</header>
+
+<main id="deck">
+
+<!-- ════════ SLIDE 1 — TITLE ════════════════════════════════════
+     Hero, one Playfair fragment, one media capsule, one emoji.
+     Replace everything between the DEMO markers. -->
+<section class="slide" data-title="Judul">
+  <div class="slide__inner">
+    <p class="kicker reveal">Update pengembangan · {{PERIOD}}</p>
+    <h1 class="hero reveal">
+      Apa <span class="ed ed--accent">yang</span> berubah
+      <span class="pill pill--media"><img src="{{HERO_IMG}}" alt=""></span>
+      di {{PRODUCT}}
+      <svg class="spark spark--accent" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.4 5 10.8 12 12-7 1.2-11.4 5.6-12 12-.6-6.4-5-10.8-12-12 7-1.2 11.4-5.6 12-12z"/></svg>
+    </h1>
+    <p class="lead reveal">{{ONE_LINE_SUMMARY}}</p>
+    <div class="reveal" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+      <span class="pill pill--accent">{{N}} commit</span>
+      <span class="pill">{{DATE_RANGE}}</span>
+      <span class="pill">untuk {{AUDIENCE}}</span>
+    </div>
+  </div>
+  <aside class="notes">Catatan pembicara: buka dengan satu kalimat soal kenapa periode ini penting.</aside>
+</section>
+
+<!-- ════════ SLIDE 2 — THE FIVE-LINE VERSION ════════ -->
+<section class="slide" data-title="Ringkasan">
+  <div class="slide__inner grid">
+    <div class="col-7">
+      <p class="kicker reveal">Ringkas</p>
+      <h2 class="title reveal">Tiga hal yang benar-benar <span class="ed">selesai</span></h2>
+      <ul class="points">
+        <li class="reveal"><svg class="spark spark--accent" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.4 5 10.8 12 12-7 1.2-11.4 5.6-12 12-.6-6.4-5-10.8-12-12 7-1.2 11.4-5.6 12-12z"/></svg><span>{{POINT_1}}</span></li>
+        <li class="reveal"><svg class="spark spark--accent" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.4 5 10.8 12 12-7 1.2-11.4 5.6-12 12-.6-6.4-5-10.8-12-12 7-1.2 11.4-5.6 12-12z"/></svg><span>{{POINT_2}}</span></li>
+        <li class="reveal"><svg class="spark spark--accent" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.4 5 10.8 12 12-7 1.2-11.4 5.6-12 12-.6-6.4-5-10.8-12-12 7-1.2 11.4-5.6 12-12z"/></svg><span>{{POINT_3}}</span></li>
+      </ul>
+    </div>
+    <div class="col-5">
+      <div class="stats">
+        <div class="stat stat--accent reveal"><span class="stat__n">{{N1}}</span><span class="stat__l">{{LABEL_1}}</span></div>
+        <div class="stat reveal"><span class="stat__n">{{N2}}</span><span class="stat__l">{{LABEL_2}}</span></div>
+        <div class="stat stat--counter reveal"><span class="stat__n">{{N3}}</span><span class="stat__l">{{LABEL_3}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SLIDE 3 — THEME WITH A FLOW DIAGRAM ════════
+     Keep the SVG only if the flow is genuinely easier to see than to read. -->
+<section class="slide" data-title="Alur">
+  <div class="slide__inner grid">
+    <div class="col-5">
+      <p class="kicker reveal">Tema 1</p>
+      <h2 class="title reveal">{{THEME_TITLE}}</h2>
+      <p class="reveal">{{EFFECT_SENTENCE}}</p>
+      <p class="reveal">{{MECHANISM_SENTENCE}}</p>
+    </div>
+    <div class="col-7 reveal">
+      <svg class="viz" viewBox="0 0 640 300" role="img" aria-labelledby="viz1t">
+        <title id="viz1t">{{DIAGRAM_DESCRIPTION}}</title>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g>
+          <rect class="node" x="10" y="110" width="150" height="72" rx="12"/>
+          <text class="label" x="30" y="142">Unggah</text>
+          <text class="sub" x="30" y="162">PDF, DOCX, DWG</text>
+
+          <path class="flow" d="M168 146 H228"/>
+
+          <rect class="node" x="236" y="110" width="150" height="72" rx="12"/>
+          <text class="label" x="256" y="142">Konversi</text>
+          <text class="sub" x="256" y="162">LibreOffice, OCR</text>
+
+          <path class="flow flow--hot" d="M394 146 H454"/>
+
+          <rect class="node node--hot" x="462" y="110" width="166" height="72" rx="12"/>
+          <text class="label" x="482" y="142">Index</text>
+          <text class="sub" x="482" y="162">chunk siap dicari</text>
+
+          <path class="flow" d="M311 190 V240 H90 V190"/>
+          <text class="sub" x="196" y="262" text-anchor="middle">gagal konversi, antre ulang</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <aside class="notes">Detail teknis untuk pembicara, tidak tampil di layar.</aside>
+</section>
+
+<!-- ════════ SLIDE 4 — BEFORE / AFTER ════════ -->
+<section class="slide" data-title="Sebelum dan sesudah">
+  <div class="slide__inner grid">
+    <div class="col-5">
+      <p class="kicker reveal">Performa</p>
+      <h2 class="title reveal">Dari <span class="ed ed--counter">lambat</span> jadi instan</h2>
+      <p class="reveal">{{WHAT_THE_USER_FEELS}}</p>
+      <p class="meta reveal">{{HOW_IT_WAS_MEASURED}}</p>
+    </div>
+    <div class="col-7 reveal">
+      <svg class="viz" viewBox="0 0 600 280" role="img" aria-labelledby="viz2t">
+        <title id="viz2t">Waktu muat sebelum dan sesudah perbaikan index</title>
+        <line class="axis" x1="40" y1="230" x2="560" y2="230"/>
+        <rect class="bar grow" style="--origin:0 230px" x="120" y="50" width="110" height="180" fill="var(--counter)"/>
+        <text class="label" x="175" y="255" text-anchor="middle">Sebelum</text>
+        <text class="label" x="175" y="38" text-anchor="middle" style="font-size:18px">13,3 s</text>
+        <rect class="bar grow" style="--origin:0 230px" x="360" y="221" width="110" height="9" fill="var(--accent)"/>
+        <text class="label" x="415" y="255" text-anchor="middle">Sesudah</text>
+        <text class="label" x="415" y="209" text-anchor="middle" style="font-size:18px">175 ms</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SLIDE 5 — A SLIDE THAT IS JUST ONE SENTENCE ════════
+     Uneven slide weight is what stops the deck reading as generated. -->
+<section class="slide" data-title="Kutipan">
+  <div class="slide__inner">
+    <h2 class="title reveal" style="max-width:18ch">Satu kalimat yang <span class="ed ed--accent">layak</span> berdiri sendiri. 🔥</h2>
+    <p class="meta reveal">{{ATTRIBUTION_OR_CONTEXT}}</p>
+  </div>
+</section>
+
+<!-- ════════ SLIDE 6 — WHAT IS STILL OPEN ════════ -->
+<section class="slide" data-title="Yang masih terbuka">
+  <div class="slide__inner">
+    <p class="kicker reveal">Belum selesai</p>
+    <h2 class="title reveal" style="margin-bottom:2rem">Yang masih menggantung</h2>
+    <div class="col-8">
+      <div class="status is-blocked reveal"><span class="status__tag">Blocked</span><p style="margin:0">{{BLOCKED_ITEM}}</p></div>
+      <div class="status is-open reveal"><span class="status__tag">Jalan</span><p style="margin:0">{{IN_PROGRESS_ITEM}}</p></div>
+      <div class="status is-open reveal"><span class="status__tag">Antre</span><p style="margin:0">{{QUEUED_ITEM}}</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SLIDE 7 — CLOSING, ENDS ON THE ASK ════════ -->
+<section class="slide" data-title="Penutup">
+  <div class="slide__inner">
+    <p class="kicker reveal">Yang kami butuhkan</p>
+    <h1 class="hero reveal" style="font-size:clamp(2.4rem,6vw,5rem);max-width:16ch">{{THE_ONE_ASK}}</h1>
+    <p class="lead reveal">{{WHAT_HAPPENS_AFTER_THE_DECISION}}</p>
+    <p class="meta reveal">{{CONTACT_OR_NEXT_REVIEW_DATE}}</p>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview" hidden>
+  <h2>Semua slide</h2>
+  <div class="overview__grid" id="ovGrid"></div>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  var overview = document.getElementById('overview');
+  var ovGrid = document.getElementById('ovGrid');
+  var btnOverview = document.getElementById('btnOverview');
+  var i = 0;
+
+  document.getElementById('tot').textContent = slides.length;
+
+  // stagger index for the reveal animation
+  slides.forEach(function (s) {
+    s.querySelectorAll('.reveal').forEach(function (el, n) { el.style.setProperty('--i', n); });
+  });
+
+  // exact path lengths so the draw-on animation lands cleanly
+  document.querySelectorAll('.viz .flow').forEach(function (p) {
+    try { p.style.setProperty('--len', Math.ceil(p.getTotalLength())); } catch (e) {}
+  });
+
+  function go(n, push) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+    cur.textContent = i + 1;
+    rail.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (push !== false) history.replaceState(null, '', '#slide-' + (i + 1));
+    Array.prototype.forEach.call(ovGrid.children, function (c, k) {
+      c.setAttribute('aria-current', k === i ? 'true' : 'false');
+    });
+  }
+
+  slides.forEach(function (s, k) {
+    var b = document.createElement('button');
+    b.className = 'ov-card';
+    b.type = 'button';
+    b.innerHTML = '<span class="ov-card__n">' + String(k + 1).padStart(2, '0') + '</span>' +
+                  '<span class="ov-card__t"></span>';
+    b.lastChild.textContent = s.dataset.title || ('Slide ' + (k + 1));
+    b.addEventListener('click', function () { toggleOverview(false); go(k); });
+    ovGrid.appendChild(b);
+  });
+
+  function toggleOverview(force) {
+    var open = typeof force === 'boolean' ? force : overview.hidden;
+    overview.hidden = !open;
+  }
+  btnOverview.addEventListener('click', function () { toggleOverview(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') { toggleOverview(false); return; }
+    if (k === 'o' || k === 'O') { toggleOverview(); return; }
+    if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+      return;
+    }
+    if (!overview.hidden) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+  });
+
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.hud, .overview, a, button')) return;
+    go(i + 1);
+  });
+
+  function fromHash(push) {
+    var m = /^#slide-(\d+)$/.exec(location.hash);
+    go(m ? parseInt(m[1], 10) - 1 : 0, push);
+  }
+  window.addEventListener('hashchange', function () { fromHash(false); });
+  fromHash(false);
+})();
+</script>
+</body>
+</html>
