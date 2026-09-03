@@ -14,5 +14,8 @@ Rules that override any assumption you might make:
    any of the three.
 2. Only report facts you pulled out of git and the working tree. No invented
    metrics, no invented dates, no rounded-up numbers.
-3. Finish by opening the deck in the browser pane and taking a screenshot of
-   the title slide plus one content slide, so the user sees it works.
+3. Finish by opening the deck file itself in the browser pane, by its
+   `file:///…` URL, and taking a screenshot of the title slide plus one content
+   slide. Never start the project's dev server to do this: the deck is a static
+   file, and showing the user their own app on localhost instead of the deck is
+   the single most confusing way to end this task.

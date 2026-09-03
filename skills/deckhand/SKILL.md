@@ -141,6 +141,22 @@ rule it encodes, including where you are allowed to depart from it.
 Write the file to `presentations/<project>-update-<YYYY-MM-DD>.html` in the
 user's repo unless they name a path.
 
+**It is a deck, not a dashboard.** This is the most common way the output goes
+wrong: the shell stays correct while the slides fill up with tiles until the
+thing reads as a monitoring panel. A dashboard shows many numbers at once so a
+reader can scan for anomalies. A deck shows one idea at a time because a speaker
+is talking over it. Hard limits:
+
+- One stat row (`.stats`) in the whole deck, on the numbers slide. Nowhere else.
+- At most two `.card` blocks on a slide, and never a grid of three or more —
+  three equal cards in a row is the corporate-template tell.
+- One chart or diagram per slide. Two visuals side by side is a dashboard panel.
+- No sidebar, no KPI strip, no widget grid, no per-slide legend or filter row.
+- If a slide needs a scrollbar to show everything, it is two slides.
+
+The change list on slide 5 is the one place density belongs, and it is a text
+ledger, not tiles.
+
 ## Step 7 — Visuals, only where they earn it
 
 Read `references/svg-playbook.md`. The gate before drawing anything:
@@ -158,15 +174,25 @@ a deck where none of them mean anything. Photos follow
 
 ## Step 8 — Verify, then hand it over
 
-1. Open it in the browser pane (`preview_start` with a `file://` URL).
-2. `read_console_messages` — zero errors.
-3. Arrow-key through every slide; check nothing overflows at 1280×720 and at
-   1920×1080.
-4. Screenshot the title slide and one content slide.
-5. Send the file with `SendUserFile`.
+**Never start the project's dev server for this.** The deck is a static file and
+has nothing to do with the app. `preview_start` with a `name` from
+`.claude/launch.json` boots the product on localhost and shows the user their own
+dashboard instead of the deck, which looks exactly like the skill produced the
+wrong thing. Open the file and only the file.
 
-Tell the user how to present it: `F` full screen, arrows or space to advance,
-`O` for the overview grid, `Ctrl/Cmd+P` to export a PDF.
+1. `preview_start` with the deck's own `file:///…` URL as `url`. No `name`, no
+   dev server, no localhost. If a server is already running, ignore it.
+2. Confirm the tab is the deck: the slide counter reads `1 / N`.
+3. `read_console_messages` — zero errors.
+4. Arrow-key through every slide; check nothing overflows at 1280×720 and at
+   1920×1080.
+5. Screenshot the title slide and one content slide.
+6. Send the file with `SendUserFile`.
+
+Tell the user how to open it themselves: double-click the file, or
+`start <path>` on Windows and `open <path>` on macOS. Then how to present it:
+`F` full screen, arrows or space to advance, `O` for the overview grid,
+`Ctrl/Cmd+P` to export a PDF.
 
 ## Reference files
 
