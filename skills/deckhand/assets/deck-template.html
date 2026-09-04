@@ -13,15 +13,50 @@
    --counter for a color the project does NOT use.
    ───────────────────────────────────────────────────────────── */
 :root{
+  color-scheme:light dark;
   --ground:#f6f5f3; --surface:#ffffff;
   --ink:#12110f; --ink-soft:#4a4842; --muted:#6b6862;
   --line:rgba(18,17,15,.10); --line-strong:rgba(18,17,15,.18);
   --accent:#00a9b4; --accent-soft:rgba(0,169,180,.12);
   --counter:#c2532f; --counter-soft:rgba(194,83,47,.12);
   --ok:#2f7d4f; --warn:#b7791f; --bad:#c0392b;
+  --glass:rgba(255,255,255,.55);
+  --veil:rgba(246,245,243,.92);
+  --shadow:0 1px 2px rgba(18,17,15,.04),0 8px 24px rgba(18,17,15,.05);
+  --shadow-card:0 1px 2px rgba(18,17,15,.04),0 12px 32px rgba(18,17,15,.05);
   --r-pill:999px; --r-card:18px;
   --pad-x:clamp(3rem,7vw,7rem);
   --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+/* Dark palette. Set data-theme="dark" or "light" on <html> to pin a theme;
+   leave it off to follow the viewer's system setting. Accents are lifted
+   because the light-ground versions lose contrast on a dark field. */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e0e10; --surface:#17171a;
+    --ink:#f4f3f1; --ink-soft:#cfccc7; --muted:#8e8b86;
+    --line:rgba(244,243,241,.12); --line-strong:rgba(244,243,241,.22);
+    --accent:#2fd0da; --accent-soft:rgba(47,208,218,.16);
+    --counter:#e8794f; --counter-soft:rgba(232,121,79,.16);
+    --ok:#4caf7d; --warn:#d9a441; --bad:#e4635a;
+    --glass:rgba(255,255,255,.07);
+    --veil:rgba(14,14,16,.92);
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+    --shadow-card:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e0e10; --surface:#17171a;
+  --ink:#f4f3f1; --ink-soft:#cfccc7; --muted:#8e8b86;
+  --line:rgba(244,243,241,.12); --line-strong:rgba(244,243,241,.22);
+  --accent:#2fd0da; --accent-soft:rgba(47,208,218,.16);
+  --counter:#e8794f; --counter-soft:rgba(232,121,79,.16);
+  --ok:#4caf7d; --warn:#d9a441; --bad:#e4635a;
+  --glass:rgba(255,255,255,.07);
+  --veil:rgba(14,14,16,.92);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  --shadow-card:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -51,11 +86,11 @@ body{
 .pill{
   display:inline-flex;align-items:center;gap:.5rem;
   padding:.42rem .95rem;border-radius:var(--r-pill);
-  background:rgba(255,255,255,.55);border:1px solid var(--line);
+  background:var(--glass);border:1px solid var(--line);
   -webkit-backdrop-filter:blur(14px) saturate(140%);
   backdrop-filter:blur(14px) saturate(140%);
   font:600 .82rem/1.2 inherit;letter-spacing:.01em;color:var(--ink-soft);
-  box-shadow:0 1px 2px rgba(18,17,15,.04),0 8px 24px rgba(18,17,15,.05);
+  box-shadow:var(--shadow);
 }
 button.pill{cursor:pointer;font-family:inherit}
 button.pill:hover{border-color:var(--line-strong);color:var(--ink)}
@@ -147,7 +182,7 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
 /* small card, used sparingly */
 .card{
   background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
-  padding:1.5rem 1.6rem;box-shadow:0 1px 2px rgba(18,17,15,.04),0 12px 32px rgba(18,17,15,.05);
+  padding:1.5rem 1.6rem;box-shadow:var(--shadow-card);
 }
 .card h3{margin:.1rem 0 .5rem;font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
 .card p{font-size:.95rem;margin:0}
@@ -167,6 +202,22 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
   color:var(--accent);min-width:74px;
 }
 .row__t{margin:0;font-size:clamp(.9rem,1.15vw,1rem);line-height:1.45;max-width:44ch}
+
+/* priority list — recommendations ranked, for engineering audiences */
+.prio{display:grid;gap:0;max-width:74ch}
+.prio__row{
+  display:grid;grid-template-columns:92px 1fr;gap:1.1rem;align-items:baseline;
+  padding:.95rem 0;border-top:1px solid var(--line);
+}
+.prio__tag{
+  font:800 .66rem/1 inherit;letter-spacing:.1em;text-transform:uppercase;
+  padding:.34rem .5rem;border-radius:var(--r-pill);text-align:center;
+}
+.prio--high .prio__tag{background:var(--counter-soft);color:var(--counter)}
+.prio--med  .prio__tag{background:var(--accent-soft);color:var(--accent)}
+.prio--low  .prio__tag{background:var(--line);color:var(--muted)}
+.prio__t{margin:0;font-weight:600;color:var(--ink)}
+.prio__why{margin:.3rem 0 0;font-size:.88rem;line-height:1.45;color:var(--muted);max-width:58ch}
 
 /* risk / status line */
 .status{display:flex;align-items:baseline;gap:.7rem;padding:1rem 0;border-top:1px solid var(--line)}
@@ -216,7 +267,7 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
    6. OVERVIEW
    ───────────────────────────────────────────────────────────── */
 .overview{
-  position:fixed;inset:0;z-index:70;background:rgba(246,245,243,.92);
+  position:fixed;inset:0;z-index:70;background:var(--veil);
   -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
   padding:6rem var(--pad-x) 3rem;overflow:auto;
 }
@@ -238,7 +289,7 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
    ───────────────────────────────────────────────────────────── */
 @page{size:A4 landscape;margin:12mm}
 @media print{
-  body{overflow:visible;background:#fff}
+  body{overflow:visible;background:#fff;color:#000}
   .rail,.hud,.overview{display:none !important}
   #deck{height:auto}
   .slide{
@@ -436,7 +487,38 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
   </div>
 </section>
 
-<!-- ════════ SLIDE 7 — CLOSING, ENDS ON THE ASK ════════ -->
+<!-- ════════ SLIDE 7 — WHAT WE RECOMMEND NEXT ════════
+     Engineering and mixed audiences: rank it. High means it blocks something or
+     costs us daily, medium means it hurts but has a workaround, low means it is
+     worth doing when there is room. Each row says what and why in one line.
+     For a management-only room, drop the tags and keep three ordered lines. -->
+<section class="slide" data-title="Rekomendasi berikutnya">
+  <div class="slide__inner">
+    <p class="kicker reveal">Rekomendasi</p>
+    <h2 class="title reveal" style="margin-bottom:1.6rem">Yang sebaiknya dikerjakan berikutnya</h2>
+    <div class="prio">
+      <div class="prio__row prio--high reveal">
+        <span class="prio__tag">High</span>
+        <div><p class="prio__t">{{PRIO_HIGH_1}}</p><p class="prio__why">{{PRIO_HIGH_1_WHY}}</p></div>
+      </div>
+      <div class="prio__row prio--high reveal">
+        <span class="prio__tag">High</span>
+        <div><p class="prio__t">{{PRIO_HIGH_2}}</p><p class="prio__why">{{PRIO_HIGH_2_WHY}}</p></div>
+      </div>
+      <div class="prio__row prio--med reveal">
+        <span class="prio__tag">Medium</span>
+        <div><p class="prio__t">{{PRIO_MED_1}}</p><p class="prio__why">{{PRIO_MED_1_WHY}}</p></div>
+      </div>
+      <div class="prio__row prio--low reveal">
+        <span class="prio__tag">Low</span>
+        <div><p class="prio__t">{{PRIO_LOW_1}}</p><p class="prio__why">{{PRIO_LOW_1_WHY}}</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Sebutkan dasar urutannya: apa yang memblokir, apa yang punya workaround.</aside>
+</section>
+
+<!-- ════════ SLIDE 8 — CLOSING, ENDS ON THE ASK ════════ -->
 <section class="slide" data-title="Penutup">
   <div class="slide__inner">
     <p class="kicker reveal">Yang kami butuhkan</p>
@@ -508,6 +590,13 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
     var k = e.key;
     if (k === 'Escape') { toggleOverview(false); return; }
     if (k === 'o' || k === 'O') { toggleOverview(); return; }
+    if (k === 'd' || k === 'D') {
+      var root = document.documentElement;
+      var now = root.getAttribute('data-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', now === 'dark' ? 'light' : 'dark');
+      return;
+    }
     if (k === 'f' || k === 'F') {
       if (document.fullscreenElement) document.exitFullscreen();
       else document.documentElement.requestFullscreen();

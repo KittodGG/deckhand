@@ -94,10 +94,20 @@ counter-accent mean "bad" — that reads as decoration, not as data.
 }
 ```
 
-Dark mode is optional for a deck. Include it when the room is dark or the user
-asks; then redefine the tokens under `@media (prefers-color-scheme: dark)` and
-check contrast again, because an accent that worked on off-white usually needs
-lightening by 10 to 15%.
+Both themes ship in the template. Light is the bare `:root`, dark is redefined
+twice: under `@media (prefers-color-scheme: dark)` guarded as
+`:root:not([data-theme="light"])`, and again under `:root[data-theme="dark"]` so
+an explicit choice wins in both directions. Pin one with `data-theme` on `<html>`
+or omit it to follow the viewer's system.
+
+Never define a color only inside a dark block, and never hand-write a second
+palette. When you swap in the project's accent, lift the dark variant by 10 to
+15% lightness: an accent tuned for off-white goes muddy on a dark field. Teal
+`#00a9b4` becomes `#2fd0da`, terracotta `#c2532f` becomes `#e8794f`.
+
+Default to light. A projector washes out dark backgrounds and a handout prints
+from the light palette anyway. Dark earns its place in a dim room or a screen
+share.
 
 Contrast floor: 4.5:1 under 24px, 3:1 above. A projector eats contrast, so aim
 above the minimum.
@@ -177,9 +187,10 @@ Animation that does not help someone understand something only makes them wait.
 ## Navigation and mechanics
 
 The template implements: arrow keys, space, PageUp/PageDown, touch swipe, `F`
-for full screen, `O` for the overview grid, `Esc` to leave it, a slide counter
-pill, a thin progress rail in the accent, deep-linkable `#slide-7` hashes, and a
-print stylesheet that emits one landscape page per slide.
+for full screen, `O` for the overview grid, `Esc` to leave it, `D` to flip light
+and dark, a slide counter pill, a thin progress rail in the accent,
+deep-linkable `#slide-7` hashes, and a print stylesheet that emits one landscape
+page per slide.
 
 Keep them. Rewriting the shell means rebuilding all of that badly.
 

@@ -22,11 +22,32 @@ Turn commits into a deck someone can actually sit through.
 Output is one `.html` file. No build step, no framework, no server. Opens by
 double-click, presents full screen, prints to PDF.
 
+## Step 0 — Which harness you are on
+
+This skill is plain markdown plus one shell script, so it runs anywhere an agent
+can read files and run `git`. Nothing below needs a Claude Code tool.
+
+- **Asking questions.** Claude Code has `AskUserQuestion`, which renders the
+  intake as pickable options. Everywhere else, ask the same questions as one
+  numbered message and wait for the reply. Never split them across turns.
+- **Paths.** Under Claude Code the skill lives at `${CLAUDE_PLUGIN_ROOT}`. Under
+  any other harness, resolve paths relative to this `SKILL.md`, or to
+  `~/.deckhand` / the cloned repo if that is where the user put it.
+- **Preview.** Claude Code and Cursor can open the finished file in a browser
+  pane. Codex, Gemini CLI, Aider, and a plain terminal cannot: skip the preview
+  steps, run the static checks instead, and print the absolute path so the user
+  opens it themselves.
+- **Sending files.** `SendUserFile` is Claude Code only. Elsewhere, print the
+  path.
+
+Everything else in this file is harness-neutral.
+
 ## Step 1 — Intake (never skip, never guess)
 
-Ask all three questions in a single `AskUserQuestion` call before touching git.
-If the user already answered one in their prompt, still confirm the other two.
-Do not start writing with an assumed audience or an assumed language.
+Ask all four questions in one go before touching git, in a single
+`AskUserQuestion` call if the harness has it, otherwise as one numbered message.
+If the user already answered one in their prompt, still confirm the rest. Do not
+start writing with an assumed audience or an assumed language.
 
 **Question 1 — Scope.** header `Cakupan`
 
@@ -49,19 +70,35 @@ you never hide a problem, you change how much machinery you explain.
 - `Campur` — Indonesian sentences, English technical terms, which is how most
   Indonesian engineering teams actually talk.
 
-Also worth asking in the same call when the repo is ambiguous: which repo or
+**Question 4 — Theme.** header `Tema`:
+
+- `Terang` — pins `data-theme="light"`. The default for a printed handout, a
+  bright meeting room, or a projector, which washes out dark backgrounds.
+- `Gelap` — pins `data-theme="dark"`. Good for a dim room or a screen share.
+- `Ikut sistem` — omit the attribute and the deck follows each viewer's OS
+  setting.
+
+Set the attribute on the `<html>` tag. The palette is already defined for both
+in the template; do not hand-write a second set of colors. Whatever the choice,
+the viewer can still press `D` to flip.
+
+Also worth asking in the same message when the repo is ambiguous: which repo or
 subfolder. A monorepo with three apps needs to know which one is on stage.
 
 ## Step 2 — Pull the real changes
 
+`<skill>` below is this skill's own directory: `${CLAUDE_PLUGIN_ROOT}/skills/deckhand`
+under Claude Code, otherwise wherever this `SKILL.md` sits.
+
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/skills/deckhand/scripts/collect-changes.sh" --count 20
-bash "${CLAUDE_PLUGIN_ROOT}/skills/deckhand/scripts/collect-changes.sh" --since 2026-08-01
-bash "${CLAUDE_PLUGIN_ROOT}/skills/deckhand/scripts/collect-changes.sh" --range v2.1..HEAD
+bash "<skill>/scripts/collect-changes.sh" --count 20
+bash "<skill>/scripts/collect-changes.sh" --since 2026-08-01
+bash "<skill>/scripts/collect-changes.sh" --range v2.1..HEAD
 ```
 
 Add `--repo <path>` for a subproject. The script prints subject lines, authors,
-dates, changed-file stats, and a conventional-commit type breakdown.
+dates, changed-file stats, a conventional-commit type breakdown, and the issue
+numbers those commits reference.
 
 Then go deeper than the subject lines. Commit messages are a table of contents,
 not the content. For anything that will get its own slide, read the diff
@@ -75,6 +112,38 @@ type-facing: "Approval flow now survives a rejected step" beats "12 fixes".
 **Facts only.** Every number on a slide comes from the log, the diff, a test
 run, or a benchmark you actually executed. If you want to claim something got
 faster, measure it or drop the claim.
+
+### Read the issues the commits point at
+
+A commit message says what changed. The issue behind it says why it had to
+change, who reported it, what it broke, and what "done" meant. That is exactly
+the half a progress deck needs and the half git alone cannot give you. Teams
+that open an issue before every fix are handing you the narrative for free.
+
+The script's `## ISSUE REFS` section lists the numbers. For each one that will
+reach a slide:
+
+```bash
+gh issue view <number> --json number,title,body,labels,state,closedAt
+gh issue list --state closed --search "closed:>=2026-08-01" --json number,title,labels
+```
+
+Pull out: the reported symptom in the reporter's own words, the root cause if it
+was written down, the labels (they usually carry severity and area), and whether
+it is actually closed. Then use it like this:
+
+- The issue's symptom becomes the "why it mattered" line on the theme slide.
+- The reporter's phrasing is better plain-language copy than anything you would
+  write. Borrow it.
+- An issue still open while its commits are merged is a partial fix, and belongs
+  on the open-items slide, not the shipped list.
+- Labels feed the priority ranking on the recommendations slide.
+
+Cite issue numbers on the slide only for an engineering audience. `#412` means
+nothing to a manager; the sentence from its body means everything.
+
+If `gh` is missing or unauthenticated, say so in one line and continue from git
+alone. Do not stall the deck on it, and do not invent an issue's contents.
 
 ## Step 3 — Read the project's identity
 
@@ -105,8 +174,24 @@ Default arc, stretch or trim as the material demands (no slide limit):
 5. The change list — every shipped item, one line each, grouped by kind
 6. What broke and how it was handled, when there was something
 7. What is still open — honest, dated, no "coming soon" vapor
-8. Next period's focus
+8. What we recommend next — ranked, see below
 9. Close — one ask or one decision needed from the room
+
+**Rank the recommendations.** The next-steps slide is the one engineers argue
+about, so give them something to argue with. Group into `High` / `Medium` /
+`Low` and put one line of justification under each item:
+
+- `High` — blocks other work, costs the team every day, or is a live risk.
+- `Medium` — hurts, but there is a workaround people are already using.
+- `Low` — worth doing when there is room. Nothing breaks if it waits.
+
+Two `High` items is a plan. Six is a list nobody will act on, so merge or demote.
+The justification line is what makes the ranking arguable instead of arbitrary:
+"blocks the staging deploy" beats "important". Issue labels and the open-items
+slide are where the ranking comes from, not from a feeling.
+
+For a management-only room, keep the same order but drop the tags: three
+sentences in priority order reads better than a triage board.
 
 **Keep display slides rare.** A slide that is one big typographic statement is
 worth at most one per deck, and only where it earns the pause: a section break
@@ -133,8 +218,10 @@ fonts, palette variables, slide mechanics, keyboard and touch navigation,
 overview grid, progress rail, print stylesheet, reveal animation, and the
 component vocabulary (pills, badges, sparkles, stat blocks, editorial titles).
 
-Copy it, replace the palette variables and the `<section class="slide">`
-blocks, and delete the demo slides. Do not restyle it from scratch: the design
+Copy it, set `data-theme` on `<html>` per the theme answer, replace the palette
+variables and the `<section class="slide">` blocks, and delete the demo slides.
+Both palettes are already defined, so a theme choice is one attribute, never a
+second stylesheet. Do not restyle it from scratch: the design
 is the deliverable's spine, and `references/design-system.md` explains every
 rule it encodes, including where you are allowed to depart from it.
 
@@ -180,19 +267,32 @@ has nothing to do with the app. `preview_start` with a `name` from
 dashboard instead of the deck, which looks exactly like the skill produced the
 wrong thing. Open the file and only the file.
 
-1. `preview_start` with the deck's own `file:///…` URL as `url`. No `name`, no
-   dev server, no localhost. If a server is already running, ignore it.
+**On a harness with a browser preview** (Claude Code, Cursor):
+
+1. Open the deck's own `file:///…` URL. No launch config, no dev server, no
+   localhost. If a server is already running, ignore it.
 2. Confirm the tab is the deck: the slide counter reads `1 / N`.
-3. `read_console_messages` — zero errors.
+3. Read the console — zero errors.
 4. Arrow-key through every slide; check nothing overflows at 1280×720 and at
    1920×1080.
 5. Screenshot the title slide and one content slide.
-6. Send the file with `SendUserFile`.
+6. Hand over the file (`SendUserFile` where it exists, otherwise the path).
 
-Tell the user how to open it themselves: double-click the file, or
-`start <path>` on Windows and `open <path>` on macOS. Then how to present it:
-`F` full screen, arrows or space to advance, `O` for the overview grid,
-`Ctrl/Cmd+P` to export a PDF.
+**On a harness without one** (Codex, Gemini CLI, Aider, plain terminal), do the
+static checks instead and say plainly that you could not open it:
+
+```bash
+grep -c '<section class="slide"' <file>   # slide count matches your outline
+grep -c '{{' <file>                       # zero placeholders left
+```
+
+Then confirm every `{{...}}` is gone, the palette variables are the project's,
+and `data-theme` matches what the user asked for.
+
+Either way, tell the user how to open it: double-click, or `start <path>` on
+Windows, `open <path>` on macOS, `xdg-open <path>` on Linux. Then how to present
+it: `F` full screen, arrows or space to advance, `O` for the overview grid, `D`
+to flip light and dark, `Ctrl/Cmd+P` to export a PDF.
 
 ## Reference files
 

@@ -62,5 +62,16 @@ g log "${SEL[@]}" --no-merges --shortstat --pretty=format: \
 g log "${SEL[@]}" --no-merges --oneline | wc -l | sed 's/^ *//; s/^/commits=/'
 
 echo
+echo "## ISSUE REFS"
+# Issue numbers referenced by commit subjects, bodies, branch names, or merge
+# commits. The issue body is usually the only place the reason for a change is
+# written down, so fetch these before writing the slides.
+g log "${SEL[@]}" --pretty=format:'%s %b' \
+  | grep -oE '#[0-9]+' | sort -u -V \
+  | tr '\n' ' ' | sed 's/^/refs: /; s/ $//'
+echo
+echo "fetch with: gh issue view <number> --json number,title,body,labels,state"
+
+echo
 echo "## NEXT STEP"
 echo "Read the diffs of anything that will get its own slide: git -C $REPO show --stat <sha>"

@@ -7,22 +7,26 @@ arrow keys to present, `Ctrl/Cmd+P` for a PDF.
 
 ## What it does
 
-You run `/deck`. It asks three things before writing a single word:
+You run `/deck`. It asks four things before writing a single word:
 
 1. **Scope** — last N commits, everything since a date, or a range like
    `v2.1..HEAD`.
 2. **Audience** — management, client, engineering team, or a mixed room.
 3. **Language** — full Indonesian, full English, or mixed (Indonesian sentences
    with English technical terms).
+4. **Theme** — light, dark, or follow the viewer's system.
 
-Then it reads the actual commits and diffs, groups them into themes people care
-about, writes the copy at a semi-technical register that a manager follows and
+Then it reads the actual commits and diffs, pulls the GitHub issues those
+commits reference so the deck can say *why* a change had to happen, groups them
+into themes people care about, writes the copy at a semi-technical register that a manager follows and
 an engineer does not find condescending, runs an anti-slop pass over it, and
 renders the deck in an editorial style built on Manrope and Playfair Display,
 using colors pulled from the project itself.
 
 Diagrams get drawn only where a picture genuinely beats a paragraph. Usually
-three to six in a twenty-slide deck.
+three to six in a twenty-slide deck. For an engineering room, the next-steps
+slide comes ranked High / Medium / Low with a line of justification under each
+item, so the room has something to argue with.
 
 ## Install
 
@@ -37,6 +41,11 @@ Or from a local clone:
 /plugin marketplace add /path/to/deckhand
 /plugin install deckhand@deckhand
 ```
+
+**Not on Claude Code?** The skill is plain markdown plus one bash script, so it
+runs under Codex, Cursor, Gemini CLI, Aider, and anything else that can read
+files and run `git`. Clone it and point your agent at
+`skills/deckhand/SKILL.md`; `AGENTS.md` has the per-harness lines.
 
 ## Use
 
@@ -67,6 +76,7 @@ drawing and nothing else.
 
 | Path | What it is |
 |---|---|
+| `AGENTS.md` | how to run it outside Claude Code |
 | `skills/deckhand/SKILL.md` | the workflow, intake through verification |
 | `skills/deckhand/assets/deck-template.html` | the deck shell: slides, keyboard and touch nav, overview grid, progress rail, print stylesheet |
 | `skills/deckhand/scripts/collect-changes.sh` | pulls commits, churn, contributors, type breakdown |
@@ -86,6 +96,7 @@ drawing and nothing else.
 | `F` | full screen |
 | `O` | overview grid |
 | `Esc` | leave overview |
+| `D` | flip light and dark |
 | `Ctrl/Cmd+P` | print, one landscape page per slide, speaker notes included |
 
 Slides deep-link: `#slide-7` opens on slide 7.
