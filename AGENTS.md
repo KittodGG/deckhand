@@ -29,9 +29,20 @@ Ask the user four things before writing anything, in one message, and wait:
 Never guess any of them. Never invent a number that is not in the log, a diff, an
 issue, or a measurement you ran.
 
-## Install without a plugin manager
+## Install
 
-Clone it and point your agent at the directory:
+```bash
+curl -fsSL https://raw.githubusercontent.com/KittodGG/deckhand/main/install.sh | bash
+```
+
+PowerShell: `irm https://raw.githubusercontent.com/KittodGG/deckhand/main/install.ps1 | iex`
+
+It clones to `~/.deckhand` and writes a pointer into every harness config
+directory that already exists. `--project` also points the current repo's
+`AGENTS.md` at it. `--uninstall` reverses everything and leaves your own lines
+alone.
+
+### Or by hand
 
 ```bash
 git clone https://github.com/KittodGG/deckhand ~/.deckhand
