@@ -161,8 +161,9 @@ Slides deep-link: `#slide-7` opens on slide 7.
 ## Template gallery
 
 Pilih `Gaya` saat intake — setiap template self-contained, jangan campur
-komponen antar template. Screenshot di bawah adalah render asli tiap template
-(cover + overview seluruh slide).
+komponen antar template. Screenshot di bawah adalah render asli tiap slide
+tiap template. Klik gambar mana pun untuk membuka file templatenya
+(shortcut ke sumber).
 
 ### `Editorial` (default) — `skills/deckhand/assets/deck-template.html`
 
@@ -171,6 +172,18 @@ Progress update umum. Manrope + Playfair italic, hangat, light/dark bebas
 
 ![Editorial cover](showcase/editorial-cover.png)
 ![Editorial overview](showcase/editorial-overview.png)
+
+| Slide | Tampilan |
+|---|---|
+| 1 — Judul | [![Editorial 1](showcase/editorial-s01.png)](skills/deckhand/assets/deck-template.html) |
+| 2 — Ringkasan | [![Editorial 2](showcase/editorial-s02.png)](skills/deckhand/assets/deck-template.html) |
+| 3 — Alur | [![Editorial 3](showcase/editorial-s03.png)](skills/deckhand/assets/deck-template.html) |
+| 4 — Sebelum dan sesudah | [![Editorial 4](showcase/editorial-s04.png)](skills/deckhand/assets/deck-template.html) |
+| 5 — Rincian perubahan | [![Editorial 5](showcase/editorial-s05.png)](skills/deckhand/assets/deck-template.html) |
+| 6 — Angka kunci | [![Editorial 6](showcase/editorial-s06.png)](skills/deckhand/assets/deck-template.html) |
+| 7 — Yang masih terbuka | [![Editorial 7](showcase/editorial-s07.png)](skills/deckhand/assets/deck-template.html) |
+| 8 — Rekomendasi berikutnya | [![Editorial 8](showcase/editorial-s08.png)](skills/deckhand/assets/deck-template.html) |
+| 9 — Penutup | [![Editorial 9](showcase/editorial-s09.png)](skills/deckhand/assets/deck-template.html) |
 
 ### `Galaxy Report` — `skills/deckhand/assets/templates/deck-galaxy.html`
 
@@ -181,6 +194,14 @@ wireframe isometric, bar chart, orb stat. Surface fixed per slide
 ![Galaxy Report cover](showcase/galaxy-report-cover.png)
 ![Galaxy Report overview](showcase/galaxy-report-overview.png)
 
+| Slide | Tampilan |
+|---|---|
+| 1 — Cover | [![Galaxy 1](showcase/galaxy-report-s01.png)](skills/deckhand/assets/templates/deck-galaxy.html) |
+| 2 — Company snapshot | [![Galaxy 2](showcase/galaxy-report-s02.png)](skills/deckhand/assets/templates/deck-galaxy.html) |
+| 3 — Paradigm | [![Galaxy 3](showcase/galaxy-report-s03.png)](skills/deckhand/assets/templates/deck-galaxy.html) |
+| 4 — Adoption | [![Galaxy 4](showcase/galaxy-report-s04.png)](skills/deckhand/assets/templates/deck-galaxy.html) |
+| 5 — Outlook | [![Galaxy 5](showcase/galaxy-report-s05.png)](skills/deckhand/assets/templates/deck-galaxy.html) |
+
 ### `Nietzsche Pitch` — `skills/deckhand/assets/templates/deck-nietzsche.html`
 
 Pitch disruptif / AI ethics / visi produk. Navy + paper, aksen indigo, news
@@ -188,6 +209,15 @@ card melayang, quote raksasa, panel blob blur. Surface fixed per slide.
 
 ![Nietzsche Pitch cover](showcase/nietzsche-pitch-cover.png)
 ![Nietzsche Pitch overview](showcase/nietzsche-pitch-overview.png)
+
+| Slide | Tampilan |
+|---|---|
+| 1 — Cover | [![Nietzsche 1](showcase/nietzsche-pitch-s01.png)](skills/deckhand/assets/templates/deck-nietzsche.html) |
+| 2 — Pernyataan | [![Nietzsche 2](showcase/nietzsche-pitch-s02.png)](skills/deckhand/assets/templates/deck-nietzsche.html) |
+| 3 — Problem | [![Nietzsche 3](showcase/nietzsche-pitch-s03.png)](skills/deckhand/assets/templates/deck-nietzsche.html) |
+| 4 — Quote | [![Nietzsche 4](showcase/nietzsche-pitch-s04.png)](skills/deckhand/assets/templates/deck-nietzsche.html) |
+| 5 — Traction | [![Nietzsche 5](showcase/nietzsche-pitch-s05.png)](skills/deckhand/assets/templates/deck-nietzsche.html) |
+| 6 — How | [![Nietzsche 6](showcase/nietzsche-pitch-s06.png)](skills/deckhand/assets/templates/deck-nietzsche.html) |
 
 ### `BB Agency` — `skills/deckhand/assets/templates/deck-bb-agency.html`
 
@@ -198,6 +228,15 @@ Surface fixed per slide.
 ![BB Agency cover](showcase/bb-agency-cover.png)
 ![BB Agency overview](showcase/bb-agency-overview.png)
 
+| Slide | Tampilan |
+|---|---|
+| 1 — Cover | [![BB Agency 1](showcase/bb-agency-s01.png)](skills/deckhand/assets/templates/deck-bb-agency.html) |
+| 2 — What's inside | [![BB Agency 2](showcase/bb-agency-s02.png)](skills/deckhand/assets/templates/deck-bb-agency.html) |
+| 3 — Who are we | [![BB Agency 3](showcase/bb-agency-s03.png)](skills/deckhand/assets/templates/deck-bb-agency.html) |
+| 4 — Mission | [![BB Agency 4](showcase/bb-agency-s04.png)](skills/deckhand/assets/templates/deck-bb-agency.html) |
+| 5 — Selected clients | [![BB Agency 5](showcase/bb-agency-s05.png)](skills/deckhand/assets/templates/deck-bb-agency.html) |
+| 6 — Simple approach | [![BB Agency 6](showcase/bb-agency-s06.png)](skills/deckhand/assets/templates/deck-bb-agency.html) |
+
 ### `Terminal` — `skills/deckhand/assets/templates/deck-terminal.html`
 
 Laporan metrik untuk audiens teknis-data. Dark mono, tabel data, bar chart,
@@ -205,6 +244,14 @@ corner-bracket, scanline. Mendukung `data-theme`.
 
 ![Terminal cover](showcase/terminal-cover.png)
 ![Terminal overview](showcase/terminal-overview.png)
+
+| Slide | Tampilan |
+|---|---|
+| 1 — Cover | [![Terminal 1](showcase/terminal-s01.png)](skills/deckhand/assets/templates/deck-terminal.html) |
+| 2 — Headline metrics | [![Terminal 2](showcase/terminal-s02.png)](skills/deckhand/assets/templates/deck-terminal.html) |
+| 3 — Sector breakdown | [![Terminal 3](showcase/terminal-s03.png)](skills/deckhand/assets/templates/deck-terminal.html) |
+| 4 — Traction | [![Terminal 4](showcase/terminal-s04.png)](skills/deckhand/assets/templates/deck-terminal.html) |
+| 5 — Rekomendasi | [![Terminal 5](showcase/terminal-s05.png)](skills/deckhand/assets/templates/deck-terminal.html) |
 
 ### `Manifesto` — `skills/deckhand/assets/templates/deck-manifesto.html`
 
@@ -214,6 +261,14 @@ merah, asterisk bullet. Mendukung `data-theme`.
 ![Manifesto cover](showcase/manifesto-cover.png)
 ![Manifesto overview](showcase/manifesto-overview.png)
 
+| Slide | Tampilan |
+|---|---|
+| 1 — Cover | [![Manifesto 1](showcase/manifesto-s01.png)](skills/deckhand/assets/templates/deck-manifesto.html) |
+| 2 — Masalah | [![Manifesto 2](showcase/manifesto-s02.png)](skills/deckhand/assets/templates/deck-manifesto.html) |
+| 3 — Tiga pilar | [![Manifesto 3](showcase/manifesto-s03.png)](skills/deckhand/assets/templates/deck-manifesto.html) |
+| 4 — Traction | [![Manifesto 4](showcase/manifesto-s04.png)](skills/deckhand/assets/templates/deck-manifesto.html) |
+| 5 — Penutup | [![Manifesto 5](showcase/manifesto-s05.png)](skills/deckhand/assets/templates/deck-manifesto.html) |
+
 ### `Swiss` — `skills/deckhand/assets/templates/deck-swiss.html`
 
 Company deck formal. Grid 12-kolom ketat, satu font, footer page number di
@@ -221,6 +276,14 @@ tiap slide, soft shadow, pill bulat. Mendukung `data-theme`.
 
 ![Swiss cover](showcase/swiss-cover.png)
 ![Swiss overview](showcase/swiss-overview.png)
+
+| Slide | Tampilan |
+|---|---|
+| 1 — Cover | [![Swiss 1](showcase/swiss-s01.png)](skills/deckhand/assets/templates/deck-swiss.html) |
+| 2 — Services | [![Swiss 2](showcase/swiss-s02.png)](skills/deckhand/assets/templates/deck-swiss.html) |
+| 3 — Project | [![Swiss 3](showcase/swiss-s03.png)](skills/deckhand/assets/templates/deck-swiss.html) |
+| 4 — About | [![Swiss 4](showcase/swiss-s04.png)](skills/deckhand/assets/templates/deck-swiss.html) |
+| 5 — Contact | [![Swiss 5](showcase/swiss-s05.png)](skills/deckhand/assets/templates/deck-swiss.html) |
 
 ## Design notes
 
