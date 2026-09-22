@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT}} — Company Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* BB AGENCY — hitam / off-white selang-seling, aksen teal.
+   Typographic deck: cover dua baris (putih + teal), meta bar atas &
+   footer meta 3 kolom, TOC angka dalam lingkaran, kolase mockup +
+   tombol Play teal, baris logo, monogram huruf raksasa.
+   Surface fixed per slide (art-directed). */
+:root{
+  --black:#0b0b0b; --paper:#f6f5f2; --teal:#2ee6c8; --lime:#d8f34e;
+  --mut-b:rgba(255,255,255,.6); --mut-p:rgba(11,11,11,.55);
+  --pad:clamp(2.2rem,4.5vw,4rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --font:"Inter",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--black);color:#fff;font-family:var(--font);font-size:15px;line-height:1.5;
+  overflow:hidden;-webkit-font-smoothing:antialiased;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+::selection{background:var(--teal);color:#000}
+
+.rail{position:fixed;inset:0 0 auto 0;height:2px;background:rgba(255,255,255,.14);z-index:60}
+.rail__fill{height:100%;width:0;background:var(--teal);transition:width .45s var(--ease)}
+.hud{position:fixed;inset:auto 0 1rem 0;z-index:50;display:flex;justify-content:flex-end;gap:.5rem;padding:0 var(--pad);pointer-events:none}
+.hud>*{pointer-events:auto}
+.hbtn{font:500 .66rem/1 var(--font);letter-spacing:.1em;cursor:pointer;background:transparent;
+  color:inherit;border:1px solid rgba(128,128,128,.5);padding:.4rem .7rem}
+.hbtn:hover{border-color:var(--teal);color:var(--teal)}
+
+#deck{position:relative;height:100%}
+.slide{position:absolute;inset:0;background:var(--black);color:#fff;
+  padding:4.2rem var(--pad) 3.6rem;opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s}
+.slide.is-active{opacity:1;visibility:visible}
+.slide--paper{background:var(--paper);color:var(--black)}
+.inner{max-width:1240px;margin:0 auto;height:100%;display:flex;flex-direction:column}
+
+/* meta bar atas + footer meta */
+.bar-top{position:absolute;top:1.2rem;left:var(--pad);right:var(--pad);display:flex;
+  justify-content:space-between;font-size:.64rem;letter-spacing:.06em;color:var(--mut-b)}
+.slide--paper .bar-top{color:var(--mut-p)}
+.bar-bot{position:absolute;bottom:1.2rem;left:var(--pad);right:var(--pad);display:flex;gap:3rem;
+  font-size:.64rem;letter-spacing:.05em;color:var(--mut-b)}
+.bar-bot span{max-width:22ch}
+.bar-bot .r{margin-left:auto;text-align:right}
+
+/* type raksasa */
+h1{font-weight:500;letter-spacing:-.035em;line-height:.98;margin:0;font-size:clamp(3rem,8.5vw,7rem)}
+h1 .t2{display:block;color:var(--teal)}
+h2{font-weight:500;letter-spacing:-.025em;line-height:1.15;margin:0 0 1.4rem;font-size:clamp(1.7rem,3.6vw,2.9rem)}
+.stmt{font-weight:500;letter-spacing:-.02em;line-height:1.25;font-size:clamp(1.5rem,3.2vw,2.5rem);max-width:24ch}
+.lab{font-size:.66rem;letter-spacing:.1em;color:var(--mut-b);margin:0 0 1.2rem}
+.slide--paper .lab{color:var(--mut-p)}
+
+/* TOC angka lingkaran */
+.tocwrap{display:grid;grid-template-columns:.7fr 1.6fr;gap:2rem;flex:1;align-content:start}
+.toc{list-style:none;margin:0;padding:0}
+.toc li{display:grid;grid-template-columns:auto 1fr;gap:1.1rem;align-items:center;
+  padding:1.05rem 0;border-bottom:1px solid rgba(11,11,11,.14)}
+.toc li:first-child{border-top:1px solid rgba(11,11,11,.14)}
+.cn{width:1.7em;height:1.7em;border:1px solid currentColor;border-radius:50%;
+  display:inline-grid;place-items:center;font-size:.72em}
+.toc .t{font-size:clamp(1.2rem,2.4vw,1.9rem);font-weight:500;letter-spacing:-.02em}
+@media(max-width:900px){.tocwrap{grid-template-columns:1fr}}
+
+/* kolase mockup + play */
+.mission{flex:1;display:flex;flex-direction:column}
+.collage{position:relative;margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;align-items:end;padding-left:3.4rem}
+.phone{background:#101010;border-radius:16px;padding:.55rem;height:210px;display:grid;gap:.45rem;align-content:start}
+.phone:nth-child(2){height:240px}.phone:nth-child(4){height:190px}
+.lm{background:var(--lime);border-radius:6px;height:26px}
+.lm.sm{height:16px;width:70%}
+.lm.bl{height:64px}
+.scr{background:#1c1c1c;border-radius:6px;height:44px}
+.play{position:absolute;left:0;top:34%;width:86px;height:86px;border-radius:50%;background:var(--teal);
+  color:#0b0b0b;display:grid;place-items:center;font-size:.8rem;font-weight:700}
+@media(max-width:900px){.collage{grid-template-columns:repeat(2,1fr)}}
+
+/* klien: paragraf center + logo row */
+.clients{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.clients p{font-size:clamp(1rem,1.9vw,1.5rem);line-height:1.45;max-width:44ch;margin:0 auto 3rem}
+.logos{display:flex;flex-wrap:wrap;gap:clamp(1.5rem,4vw,3.5rem);justify-content:space-between;align-items:center;
+  border-top:1px solid rgba(11,11,11,.14);padding-top:1.4rem}
+.lg{font-size:.95rem;font-weight:700;letter-spacing:-.01em;color:var(--black)}
+.lg.i{font-style:italic}.lg.w{font-weight:400;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem}
+
+/* monogram */
+.monos{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);flex:1;align-content:center;text-align:center}
+.mono .ch{font-size:clamp(6rem,17vw,13rem);line-height:.8;color:var(--teal);font-weight:700;letter-spacing:-.05em}
+.mono .cap{margin-top:1.4rem;font-size:clamp(1rem,2vw,1.5rem);font-weight:500}
+@media(max-width:900px){.monos{grid-template-columns:1fr}}
+
+.reveal{opacity:0;transform:translateY(12px)}
+.slide.is-active .reveal{animation:rise .45s var(--ease) forwards;animation-delay:calc(var(--i,0)*60ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+.overview{position:fixed;inset:0;z-index:70;background:rgba(11,11,11,.95);padding:5rem var(--pad) 3rem;overflow:auto}
+.overview h2{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut-b);margin:0 0 1.4rem}
+.overview__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem}
+.ov-card{text-align:left;cursor:pointer;font-family:var(--font);background:#141414;color:#fff;
+  border:1px solid rgba(255,255,255,.16);padding:1rem;display:grid;gap:.5rem;min-height:96px}
+.ov-card:hover,.ov-card[aria-current="true"]{border-color:var(--teal);color:var(--teal)}
+.ov-card__n{font-size:.66rem;letter-spacing:.12em}
+.ov-card__t{font-size:.9rem;font-weight:500;color:inherit}
+
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  body{overflow:visible}
+  .rail,.hud,.overview{display:none!important}
+  #deck{height:auto}
+  .slide{position:static;opacity:1!important;visibility:visible!important;height:auto;min-height:160mm;break-after:page}
+  .reveal{opacity:1!important;transform:none!important;animation:none!important}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="rail"><div class="rail__fill" id="rail"></div></div>
+<header class="hud">
+  <button class="hbtn" id="btnOverview" type="button">Index [O]</button>
+  <span class="hbtn"><span id="cur">1</span>/<span id="tot">1</span></span>
+</header>
+
+<main id="deck">
+
+<!-- 1 · COVER (hitam): dua baris, baris 2 teal -->
+<section class="slide" data-title="Cover">
+  <div class="inner" style="justify-content:center">
+    <h1 class="reveal">{{COMPANY_LINE1}}<span class="t2">{{COMPANY_LINE2}}</span></h1>
+  </div>
+  <div class="bar-bot"><span>{{TAGLINE}}</span><span class="r">© {{COMPANY_LINE1}}. All rights reserved.</span></div>
+</section>
+
+<!-- 2 · TOC (paper): angka dalam lingkaran -->
+<section class="slide slide--paper" data-title="What's inside">
+  <div class="bar-top"><span>Company Deck</span><span>{{PRODUCT}}</span></div>
+  <div class="inner">
+    <div class="tocwrap">
+      <p class="lab reveal" style="font-size:1rem;letter-spacing:0;color:inherit">What’s inside</p>
+      <ul class="toc">
+        <li class="reveal"><span class="cn">1</span><span class="t">{{TOC1}}</span></li>
+        <li class="reveal"><span class="cn">2</span><span class="t">{{TOC2}}</span></li>
+        <li class="reveal"><span class="cn">3</span><span class="t">{{TOC3}}</span></li>
+        <li class="reveal"><span class="cn">4</span><span class="t">{{TOC4}}</span></li>
+        <li class="reveal"><span class="cn">5</span><span class="t">{{TOC5}}</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · PERNYATAAN (hitam) -->
+<section class="slide" data-title="Who are we">
+  <div class="bar-top"><span>{{SECTION_LABEL}}</span><span>{{PRODUCT}}</span></div>
+  <div class="inner" style="justify-content:center">
+    <p class="stmt reveal" style="max-width:16ch;font-size:clamp(2.4rem,7vw,5.5rem)">{{BIG_QUESTION}}</p>
+  </div>
+  <div class="bar-bot"><span>{{YEAR}}</span><span>{{PRODUCT}} Company Deck</span><span class="r">{{SECTION_LABEL}} · {{SLIDE_NO}}</span></div>
+</section>
+
+<!-- 4 · MISSION (paper): paragraf + kolase + play -->
+<section class="slide slide--paper" data-title="Mission">
+  <div class="bar-top"><span>Mission</span><span>{{PRODUCT}}</span></div>
+  <div class="inner mission">
+    <h2 class="reveal" style="max-width:26ch">{{MISSION_STATEMENT}}</h2>
+    <div class="collage reveal">
+      <span class="play">Play</span>
+      <div class="phone"><span class="lm sm"></span><span class="lm"></span><span class="lm"></span><span class="scr"></span></div>
+      <div class="phone"><span class="lm bl"></span><span class="lm sm"></span><span class="scr"></span><span class="lm"></span></div>
+      <div class="phone"><span class="lm"></span><span class="scr"></span><span class="lm sm"></span><span class="lm bl"></span></div>
+      <div class="phone"><span class="lm sm"></span><span class="lm"></span><span class="scr"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · CLIENTS (paper): paragraf center + logo row -->
+<section class="slide slide--paper" data-title="Selected clients">
+  <div class="bar-top"><span>Selected Clients</span><span>{{PRODUCT}}</span></div>
+  <div class="inner clients">
+    <p class="reveal">{{CLIENTS_PARAGRAPH}}</p>
+    <div class="logos reveal">
+      <span class="lg i">{{LOGO1}}</span>
+      <span class="lg w">{{LOGO2}}</span>
+      <span class="lg">{{LOGO3}}</span>
+      <span class="lg w">{{LOGO4}}</span>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · APPROACH (hitam): monogram teal -->
+<section class="slide" data-title="Simple approach">
+  <div class="bar-top"><span>Simple Approach</span><span>{{PRODUCT}}</span></div>
+  <div class="inner monos">
+    <div class="mono reveal"><div class="ch">{{MONO1_CH}}</div><div class="cap">{{MONO1_CAP}}</div></div>
+    <div class="mono reveal"><div class="ch">{{MONO2_CH}}</div><div class="cap">{{MONO2_CAP}}</div></div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview" hidden>
+  <h2>Index</h2>
+  <div class="overview__grid" id="ovGrid"></div>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  var tot = document.getElementById('tot');
+  var overview = document.getElementById('overview');
+  var ovGrid = document.getElementById('ovGrid');
+  var btnOverview = document.getElementById('btnOverview');
+  var i = 0;
+  tot.textContent = slides.length;
+  slides.forEach(function (s) {
+    s.querySelectorAll('.reveal').forEach(function (el, n) { el.style.setProperty('--i', n); });
+  });
+  function go(n, push) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+    cur.textContent = i + 1;
+    if (rail) rail.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (push !== false) history.replaceState(null, '', '#slide-' + (i + 1));
+    Array.prototype.forEach.call(ovGrid.children, function (c, k) {
+      c.setAttribute('aria-current', k === i ? 'true' : 'false');
+    });
+  }
+  slides.forEach(function (s, k) {
+    var b = document.createElement('button');
+    b.className = 'ov-card'; b.type = 'button';
+    b.innerHTML = '<span class="ov-card__n">' + String(k + 1).padStart(2, '0') + '</span><span class="ov-card__t"></span>';
+    b.lastChild.textContent = s.dataset.title || ('Slide ' + (k + 1));
+    b.addEventListener('click', function () { toggleOverview(false); go(k); });
+    ovGrid.appendChild(b);
+  });
+  function toggleOverview(force) {
+    var open = typeof force === 'boolean' ? force : overview.hidden;
+    overview.hidden = !open;
+  }
+  btnOverview.addEventListener('click', function () { toggleOverview(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') { toggleOverview(false); return; }
+    if (k === 'o' || k === 'O') { toggleOverview(); return; }
+    if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+      return;
+    }
+    if (!overview.hidden) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+  });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.hud, .overview, a, button')) return;
+    go(i + 1);
+  });
+  function fromHash(push) {
+    var m = /^#slide-(\d+)$/.exec(location.hash);
+    go(m ? parseInt(m[1], 10) - 1 : 0, push);
+  }
+  window.addEventListener('hashchange', function () { fromHash(false); });
+  fromHash(false);
+})();
+</script>
+</body>
+</html>
