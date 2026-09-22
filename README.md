@@ -105,7 +105,11 @@ runs an anti-slop pass over it, and renders the deck in an editorial style built
 on Manrope and Playfair Display using colors pulled from the project itself.
 
 Diagrams get drawn only where a picture genuinely beats a paragraph, usually
-three to six in a twenty-slide deck. For an engineering room the next-steps
+three to six in a twenty-slide deck. Where behaviour must be *seen* (a flow,
+a triage, a comparison over time), the agent can select from 22
+theme-conformant widgets in `skills/deckhand/widgets/` — or invent a custom
+one from primitives. Widgets always follow the deck theme (single style via
+`var(--...)`, ikut `data-theme` + tombol `D`), never a palette of their own. For an engineering room the next-steps
 slide comes ranked High / Medium / Low with a line of justification under each
 item, so the room has something to argue with.
 
@@ -140,7 +144,12 @@ Slides deep-link: `#slide-7` opens on slide 7.
 | `install.sh` / `install.ps1` | detect harnesses, write pointers, update, uninstall |
 | `AGENTS.md` | the cross-harness entry point |
 | `skills/deckhand/SKILL.md` | the workflow, intake through verification |
-| `skills/deckhand/assets/deck-template.html` | the deck shell: slides, keyboard and touch nav, overview grid, progress rail, both themes, print stylesheet |
+| `skills/deckhand/assets/deck-template.html` | the deck shell: slides, keyboard and touch nav, overview grid, progress rail, both themes, print stylesheet, widget slots |
+| `skills/deckhand/assets/widget-loader.js` | theme-aware widget loader: injects `window.WIDGET_SPECS` into `[data-widget-slot]`, maps `kind` to deck variables |
+| `skills/deckhand/widgets/` | 22 theme-conformant widget templates (7 Agentic OS + 15 general) — 1 style mengikuti tema deck |
+| `skills/deckhand/references/widget-primitives.md` | widget building blocks: data / interaction / visual + composition rules + theme rule |
+| `skills/deckhand/references/widget-creation.md` | protocol to invent custom widgets + 6 quality gates (incl. theme conformance) |
+| `skills/deckhand/references/widget-examples.md` | 22 documented widgets with data formats + selection guide |
 | `skills/deckhand/scripts/collect-changes.sh` | commits, churn, contributors, type breakdown, issue refs |
 | `skills/deckhand/references/design-system.md` | type scale, palette rules, components, motion budget |
 | `skills/deckhand/references/narrative.md` | semi-technical register, depth per audience, language modes |
