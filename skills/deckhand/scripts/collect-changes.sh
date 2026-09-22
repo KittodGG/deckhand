@@ -70,7 +70,9 @@ g log "${SEL[@]}" --pretty=format:'%s %b' \
   | grep -oE '#[0-9]+' | sort -u -V \
   | tr '\n' ' ' | sed 's/^/refs: /; s/ $//'
 echo
-echo "fetch with: gh issue view <number> --json number,title,body,labels,state"
+echo "fetch with: gh issue view <number> --json number,title,body,labels,state,closedAt,comments"
+echo "also sweep closed-but-unreferenced: gh issue list --state closed --search \"closed:>=<scope-start-date>\" --json number,title,labels,closedAt"
+echo "(skip entirely if the repo has no issues: gh issue list --limit 1 --json number)"
 
 echo
 echo "## NEXT STEP"
