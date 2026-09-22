@@ -44,7 +44,7 @@ Everything else in this file is harness-neutral.
 
 ## Step 1 — Intake (never skip, never guess)
 
-Ask all four questions in one go before touching git, in a single
+Ask all five questions in one go before touching git, in a single
 `AskUserQuestion` call if the harness has it, otherwise as one numbered message.
 If the user already answered one in their prompt, still confirm the rest. Do not
 start writing with an assumed audience or an assumed language.
@@ -70,7 +70,7 @@ you never hide a problem, you change how much machinery you explain.
 - `Campur` — Indonesian sentences, English technical terms, which is how most
   Indonesian engineering teams actually talk.
 
-**Question 4 — Theme.** header `Tema`:
+**Question 4 — Tema warna.** header `Tema`:
 
 - `Terang` — pins `data-theme="light"`. The default for a printed handout, a
   bright meeting room, or a projector, which washes out dark backgrounds.
@@ -81,6 +81,30 @@ you never hide a problem, you change how much machinery you explain.
 Set the attribute on the `<html>` tag. The palette is already defined for both
 in the template; do not hand-write a second set of colors. Whatever the choice,
 the viewer can still press `D` to flip.
+
+> Catatan: jawaban Tema hanya dipakai di template `Editorial`
+> (`assets/deck-template.html`) dan tiga tema mandiri (`Terminal`,
+> `Manifesto`, `Swiss`) yang mendukung `data-theme`. Tiga template
+> art-directed (`Galaxy Report`, `Nietzsche Pitch`, `BB Agency`) memakai
+> surface fixed per slide persis deck aslinya — abaikan atribut `data-theme`
+> di sana.
+
+**Question 5 — Gaya visual.** header `Gaya`:
+
+| Opsi | File template | Ciri / kapan dipakai |
+|---|---|---|
+| `Editorial` (default) | `assets/deck-template.html` | Progress update umum. Manrope + Playfair, hangat, light/dark bebas |
+| `Galaxy Report` | `assets/templates/deck-galaxy.html` | Laporan korporat. Surface selang-seling hitam/putih/abu, aksen kuning, wireframe isometric, bar chart |
+| `Nietzsche Pitch` | `assets/templates/deck-nietzsche.html` | Pitch disruptif / AI ethics / visi produk. Navy + paper, aksen indigo, news card melayang, quote raksasa, blob blur |
+| `BB Agency` | `assets/templates/deck-bb-agency.html` | Sales deck / company profile / case study. Hitam + paper, aksen teal, TOC angka lingkaran, kolase mockup + Play, monogram |
+| `Terminal` | `assets/templates/deck-terminal.html` | Laporan metrik / audiens teknis-data. Dark mono, tabel data, bar chart, scanline |
+| `Manifesto` | `assets/templates/deck-manifesto.html` | Pitch garang. Serif Fraunces raksasa, hard-shadow solid, 1 warna merah |
+| `Swiss` | `assets/templates/deck-swiss.html` | Company deck formal. Grid 12-kolom ketat, 1 font, footer page number tiap slide |
+
+Each template is self-contained — copy the right one, never mix components
+across templates. Placeholder `{{...}}` yang sama dipakai di semua template
+(`{{PRODUCT}}`, `{{ONE_LINE_SUMMARY}}`, `{{ITEM_1..4}}`, `{{THE_ONE_ASK}}`,
+dll) supaya agent tinggal ganti isi tanpa merestrukturisasi slide.
 
 Also worth asking in the same message when the repo is ambiguous: which repo or
 subfolder. A monorepo with three apps needs to know which one is on stage.
@@ -213,7 +237,14 @@ would survive being deleted.
 
 ## Step 6 — Build the deck
 
-Start from `assets/deck-template.html`. It carries the whole system already:
+Start from the template that matches the **Gaya** answer. Each is
+self-contained — copy the right one, never mix components across templates.
+Set `data-theme` on `<html>` per the theme answer (hanya berlaku untuk
+`Editorial`, `Terminal`, `Manifesto`, `Swiss`; tiga template art-directed
+`Galaxy Report` / `Nietzsche Pitch` / `BB Agency` memakai surface fixed per
+slide — abaikan `data-theme` di sana).
+
+Template default `assets/deck-template.html` carries the whole system already:
 fonts, palette variables, slide mechanics, keyboard and touch navigation,
 overview grid, progress rail, print stylesheet, reveal animation, and the
 component vocabulary (pills, badges, sparkles, stat blocks, editorial titles).
@@ -259,6 +290,84 @@ Most decks need 3 to 6 real visuals. A deck where every slide has a diagram is
 a deck where none of them mean anything. Photos follow
 `references/imagery.md` — one visual family, never decorative filler.
 
+## Step 7b — Widget Strategy (interactive mini-demos)
+
+A static SVG answers "what". A widget answers "how it behaves". Use a widget
+only when the slide's insight is a behaviour, a flow, a comparison over time,
+or a triage the room should see happen — never as decoration.
+
+For each slide, after determining the single insight it must convey:
+
+### Step 1: Cek widget yang sudah ada
+
+Lihat `references/widget-examples.md` dan folder `widgets/`. Jika ada widget
+yang cocok, gunakan dengan customisasi parameter (data, label).
+
+**Contoh:**
+- Insight: "Total commits bulan ini naik 23%"
+- Widget cocok: `metric-card.html`
+- Customisasi: inject data `{value: 847, trend: +23, label: "Total Commits"}`
+
+### Step 2: Compose dari primitives
+
+Jika tidak ada exact match, compose dari primitives di
+`references/widget-primitives.md`. Ikuti composition rules dan complexity
+budget.
+
+**Contoh:**
+- Insight: "File auth.ts di-edit 47x, 10x lebih sering dari rata-rata"
+- Compose: `grid` (file tree) + `color` (edit intensity) + `drill` (click
+  untuk lihat history)
+
+### Step 3: Invent widget custom
+
+Jika compose tidak cukup, ikuti protocol di
+`references/widget-creation.md`: insight statement (1 kalimat) → core
+question → visual metaphor → sketch 3 opsi → pilih + justifikasi → build dari
+primitives → test 5 quality gates.
+
+### Quality Gates (WAJIB)
+
+1. **Clarity** — paham dalam 5 detik tanpa explanation?
+2. **Data Honesty** — tidak misleading scale / truncated axis?
+3. **Interaction Affordance** — jelas cara interact (drag, click, hover)?
+4. **Mobile Friendly** — usable di 375px?
+5. **Performance** — render <500ms, feedback <100ms?
+
+### Complexity Budget
+
+- **1 insight per widget.** 2 insight = 2 widget atau pilih yang terpenting.
+- **Max 2 interaction primitives** per widget.
+- **Max 3 visual channels** per widget.
+
+### Tema widget HARUS 1 style mengikuti tema deck (non-negotiable)
+
+Widget bukan dunia sendiri. Semua widget di satu deck memakai sistem yang
+sama dengan `assets/deck-template.html`:
+
+- Warna HANYA dari CSS variables deck: `--ground, --surface, --ink,
+  --ink-soft, --muted, --line, --accent, --accent-soft, --counter,
+  --counter-soft, --ok, --warn, --bad`. Jangan hardcode hex brand
+  (`#10b981`, `#8b5cf6`, `#f59e0b`) di widget CSS/JS.
+- Font HANYA `Manrope` (UI/body) + `Playfair Display italic` (aksen 1–4 kata)
+  + tabular-nums untuk angka. Jangan bawa `Space Grotesk / Inter / JetBrains
+  Mono` sebagai font utama widget.
+- Radius, shadow, border mengikuti `design-system.md`: pill `999px`, card
+  `18px`, shadow dua lapis yang subtle, border `var(--line)`.
+- Widget otomatis ikut `data-theme="light|dark"` dan tombol `D` karena memakai
+  variables — jangan definisikan palet dark sendiri di dalam widget.
+- Motion mengikuti budget deck: 1 hero animation per slide + 1
+  micro-interaction, `cubic-bezier(.2,.7,.2,1)`, hormati
+  `prefers-reduced-motion`.
+
+Jika widget butuh warna kategori (mis. per owner), turunkan dari `--accent`
+dan `--counter` (opacity / lightness steps), bukan palette baru.
+
+### Prioritas: kualitas > kuantitas
+
+Lebih baik 3 widget excellent daripada 10 mediocre. Jika slide bisa
+disampaikan dengan markdown biasa, **jangan pakai widget**.
+
 ## Step 8 — Verify, then hand it over
 
 **Never start the project's dev server for this.** The deck is a static file and
@@ -303,3 +412,6 @@ to flip light and dark, `Ctrl/Cmd+P` to export a PDF.
 | `references/humanize.md` | after the copy exists, as a pass over it |
 | `references/svg-playbook.md` | when a slide might need a diagram |
 | `references/imagery.md` | when a slide might need a photo |
+| `references/widget-primitives.md` | when a slide needs an interactive widget — data/interaction/visual building blocks + composition rules |
+| `references/widget-creation.md` | when no existing widget fits — protocol to invent a custom widget |
+| `references/widget-examples.md` | to select a proven widget — 22 documented widgets with data formats |
