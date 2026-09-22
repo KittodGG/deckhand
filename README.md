@@ -158,6 +158,70 @@ Slides deep-link: `#slide-7` opens on slide 7.
 | `skills/deckhand/references/imagery.md` | photo sourcing, one visual family, screenshot hygiene |
 | `skills/deck-svg/SKILL.md` | the diagram half, usable on its own anywhere |
 
+## Template gallery
+
+Pilih `Gaya` saat intake — setiap template self-contained, jangan campur
+komponen antar template. Screenshot di bawah adalah render asli tiap template
+(cover + overview seluruh slide).
+
+### `Editorial` (default) — `skills/deckhand/assets/deck-template.html`
+
+Progress update umum. Manrope + Playfair italic, hangat, light/dark bebas
+(`data-theme`, tombol `D`).
+
+![Editorial cover](showcase/editorial-cover.png)
+![Editorial overview](showcase/editorial-overview.png)
+
+### `Galaxy Report` — `skills/deckhand/assets/templates/deck-galaxy.html`
+
+Laporan korporat. Surface selang-seling hitam/putih/abu, aksen kuning,
+wireframe isometric, bar chart, orb stat. Surface fixed per slide
+(abaikan `data-theme`).
+
+![Galaxy Report cover](showcase/galaxy-report-cover.png)
+![Galaxy Report overview](showcase/galaxy-report-overview.png)
+
+### `Nietzsche Pitch` — `skills/deckhand/assets/templates/deck-nietzsche.html`
+
+Pitch disruptif / AI ethics / visi produk. Navy + paper, aksen indigo, news
+card melayang, quote raksasa, panel blob blur. Surface fixed per slide.
+
+![Nietzsche Pitch cover](showcase/nietzsche-pitch-cover.png)
+![Nietzsche Pitch overview](showcase/nietzsche-pitch-overview.png)
+
+### `BB Agency` — `skills/deckhand/assets/templates/deck-bb-agency.html`
+
+Sales deck / company profile / case study. Hitam + paper, aksen teal, TOC
+angka lingkaran, kolase mockup + tombol Play, monogram huruf raksasa.
+Surface fixed per slide.
+
+![BB Agency cover](showcase/bb-agency-cover.png)
+![BB Agency overview](showcase/bb-agency-overview.png)
+
+### `Terminal` — `skills/deckhand/assets/templates/deck-terminal.html`
+
+Laporan metrik untuk audiens teknis-data. Dark mono, tabel data, bar chart,
+corner-bracket, scanline. Mendukung `data-theme`.
+
+![Terminal cover](showcase/terminal-cover.png)
+![Terminal overview](showcase/terminal-overview.png)
+
+### `Manifesto` — `skills/deckhand/assets/templates/deck-manifesto.html`
+
+Pitch garang. Serif Fraunces raksasa, hard-shadow solid, radius 0, satu warna
+merah, asterisk bullet. Mendukung `data-theme`.
+
+![Manifesto cover](showcase/manifesto-cover.png)
+![Manifesto overview](showcase/manifesto-overview.png)
+
+### `Swiss` — `skills/deckhand/assets/templates/deck-swiss.html`
+
+Company deck formal. Grid 12-kolom ketat, satu font, footer page number di
+tiap slide, soft shadow, pill bulat. Mendukung `data-theme`.
+
+![Swiss cover](showcase/swiss-cover.png)
+![Swiss overview](showcase/swiss-overview.png)
+
 ## Design notes
 
 Linear-flavored minimalism crossed with editorial layout: oversized type on a
