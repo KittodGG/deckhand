@@ -1,0 +1,44 @@
+<!-- widgets/design-selector.html — deck tokens only -->
+<template id="design-selector-template">
+  <div class="design-selector" data-widget="design-selector">
+    <button type="button" data-action="scan">Scan systems</button>
+    <div class="tile-grid"></div>
+    <div class="match-line" data-inject="match">—</div>
+  </div>
+</template>
+<style>
+.design-selector{color:var(--ink);font-family:inherit}
+.tile-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:.5rem;margin:1rem 0}
+@media(max-width:700px){.tile-grid{grid-template-columns:repeat(4,1fr)}}
+.dtile{border:1px solid var(--line);border-radius:10px;padding:.6rem;background:var(--surface);font-size:.72rem;color:var(--ink-soft);min-height:52px;transition:border-color .25s,background .25s}
+.dtile.flash{border-color:var(--counter);background:var(--counter-soft)}
+.dtile.matched{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
+.match-line{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-size:.85rem}
+</style>
+<script>
+function initDesignSelector(container, data) {
+  var grid = container.querySelector('.tile-grid'), btn = container.querySelector('[data-action="scan"]');
+  var tiles = data.tiles || [];
+  grid.innerHTML = '';
+  tiles.forEach(function (t) {
+    var d = document.createElement('div');
+    d.className = 'dtile'; d.textContent = t.name; d.dataset.id = t.id;
+    grid.appendChild(d);
+  });
+  btn.addEventListener('click', async function () {
+    btn.disabled = true;
+    var cells = Array.from(grid.children);
+    cells.forEach(function (c) { c.classList.remove('matched'); });
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].classList.add('flash');
+      await new Promise(function (r) { setTimeout(r, 90); });
+      cells[i].classList.remove('flash');
+    }
+    var mid = data.match && data.match.id;
+    var m = grid.querySelector('[data-id="' + mid + '"]');
+    if (m) m.classList.add('matched');
+    container.querySelector('.match-line').textContent = 'MATCH ' + (data.match ? data.match.confidence + '%' : '—');
+    btn.disabled = false;
+  });
+}
+</script>

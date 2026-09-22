@@ -1,0 +1,55 @@
+<!-- widgets/slopology-analyzer.html — deck tokens only -->
+<template id="slopology-analyzer-template">
+  <div class="slopology" data-widget="slopology-analyzer">
+    <textarea class="slop-text" placeholder="Paste text to analyze..."></textarea>
+    <div class="slop-side">
+      <div class="slop-score"><span class="score-value">0</span><span class="score-unit">%</span></div>
+      <div class="slop-label">AWAITING INPUT</div>
+      <div class="slop-bars"><div class="bar-human"></div><div class="bar-ai"></div></div>
+      <div class="slop-hits"></div>
+      <div class="slop-preview"></div>
+    </div>
+  </div>
+</template>
+<style>
+.slopology{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;color:var(--ink);font-family:inherit}
+@media(max-width:700px){.slopology{grid-template-columns:1fr}}
+.slop-text{min-height:180px;padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;font-size:.9rem;resize:vertical}
+.slop-text:focus{outline:2px solid var(--accent);outline-offset:2px}
+.slop-side{padding:1.2rem;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface)}
+.slop-score{font-size:3.5rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.score-unit{font-size:1.4rem;color:var(--muted)}
+.slop-label{display:inline-block;margin-top:.6rem;font-size:.72rem;font-weight:700;letter-spacing:.1em;padding:.35rem .7rem;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.slop-bars{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--line);margin-top:1rem}
+.bar-human{background:var(--accent);width:100%;transition:width .5s} .bar-ai{background:var(--counter);width:0%;transition:width .5s}
+.slop-hits{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.hit-chip{font-size:.72rem;padding:.25rem .6rem;border-radius:999px;border:1px solid var(--bad);color:var(--bad)}
+.slop-preview{margin-top:1rem;font-size:.85rem;color:var(--ink-soft);line-height:1.6;max-height:160px;overflow:auto}
+mark.slop-hit{background:var(--counter-soft);color:var(--counter);border-bottom:1px dashed var(--counter);border-radius:3px;padding:0 2px}
+</style>
+<script>
+function initSlopologyAnalyzer(container, data) {
+  var PHRASES = data.phrases || ['leverage', 'seamless', 'cutting-edge', 'robust', 'synergy'];
+  var ta = container.querySelector('.slop-text'), score = container.querySelector('.score-value');
+  var label = container.querySelector('.slop-label'), bh = container.querySelector('.bar-human'), ba = container.querySelector('.bar-ai');
+  var hits = container.querySelector('.slop-hits'), prev = container.querySelector('.slop-preview');
+  if (data.text) { ta.value = data.text; analyze(); }
+  var t = null;
+  ta.addEventListener('input', function () { clearTimeout(t); t = setTimeout(analyze, 160); });
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function analyze() {
+    var text = ta.value, lower = text.toLowerCase(), total = 0, found = [];
+    PHRASES.forEach(function (p) {
+      var m = lower.match(new RegExp('\\b' + p + '\\w*', 'gi'));
+      if (m) { total += m.length; found.push({ p: p, n: m.length }); }
+    });
+    var s = Math.round(Math.min(99, Math.max(2, 3 + total * 8)));
+    score.textContent = text.trim() ? s : 0;
+    label.textContent = !text.trim() ? 'AWAITING INPUT' : s >= 60 ? 'LIKELY AI' : s >= 30 ? 'MIXED' : 'HUMAN';
+    bh.style.width = (100 - s) + '%'; ba.style.width = s + '%';
+    hits.innerHTML = found.slice(0, 6).map(function (h) { return '<span class="hit-chip">' + h.p + ' ×' + h.n + '</span>'; }).join('');
+    var html = esc(text), re = new RegExp('(' + PHRASES.join('|') + ')', 'gi');
+    prev.innerHTML = text ? html.replace(re, '<mark class="slop-hit">$1</mark>') : '';
+  }
+}
+</script>

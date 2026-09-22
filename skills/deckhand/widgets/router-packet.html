@@ -1,0 +1,73 @@
+<!-- widgets/router-packet.html — deck tokens only -->
+<template id="router-packet-template">
+  <div class="router-packet" data-widget="router-packet">
+    <svg class="router-svg" viewBox="0 0 600 360" role="img" aria-label="Routing diagram">
+      <g class="router-edges"></g><g class="router-nodes"></g>
+      <circle class="packet" r="6" opacity="0" fill="var(--accent)"/>
+    </svg>
+    <div class="router-ledger"></div>
+  </div>
+</template>
+<style>
+.router-packet{color:var(--ink);font-family:inherit}
+.router-svg{width:100%;height:320px}
+.router-edge{stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:4 5;fill:none}
+.router-edge.active{stroke:var(--accent)}
+.router-node-circle{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.5}
+.router-node-label{fill:var(--ink);font-size:12px;font-weight:600;text-anchor:middle}
+.router-ledger{font-size:.8rem;color:var(--muted);margin-top:.6rem;display:grid;gap:.3rem}
+</style>
+<script>
+function initRouterPacket(container, data) {
+  var svg = container.querySelector('.router-svg');
+  var eg = container.querySelector('.router-edges'), ng = container.querySelector('.router-nodes');
+  var packet = container.querySelector('.packet'), ledger = container.querySelector('.router-ledger');
+  var NS = 'http://www.w3.org/2000/svg', pos = {}, paths = {};
+  (data.nodes || []).forEach(function (n) {
+    var x = (n.x / 100) * 600, y = (n.y / 100) * 360;
+    pos[n.id] = { x: x, y: y };
+    var g = document.createElementNS(NS, 'g');
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 22); c.setAttribute('class', 'router-node-circle');
+    var t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y + 38); t.setAttribute('class', 'router-node-label'); t.textContent = n.label;
+    g.appendChild(c); g.appendChild(t); ng.appendChild(g);
+  });
+  (data.edges || []).forEach(function (e) {
+    var a = pos[e.from], b = pos[e.to]; if (!a || !b) return;
+    var p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', 'M ' + a.x + ' ' + a.y + ' C ' + (a.x + 60) + ' ' + a.y + ', ' + (b.x - 60) + ' ' + b.y + ', ' + b.x + ' ' + b.y);
+    p.setAttribute('class', 'router-edge'); eg.appendChild(p);
+    paths[e.from + '-' + e.to] = p;
+  });
+  function fly(route, kind) {
+    packet.setAttribute('fill', kind === 'counter' ? 'var(--counter)' : 'var(--accent)');
+    packet.setAttribute('opacity', 1);
+    var leg = 0;
+    (function next() {
+      if (leg >= route.length - 1) { packet.setAttribute('opacity', 0); return; }
+      var path = paths[route[leg] + '-' + route[leg + 1]];
+      if (!path) { leg++; next(); return; }
+      path.classList.add('active');
+      var len = path.getTotalLength(), t0 = performance.now(), DUR = 850;
+      (function step(now) {
+        var p = Math.min((now - t0) / DUR, 1), pt = path.getPointAtLength(p * len);
+        packet.setAttribute('cx', pt.x); packet.setAttribute('cy', pt.y);
+        if (p < 1) requestAnimationFrame(step);
+        else { path.classList.remove('active'); leg++; setTimeout(next, 120); }
+      })(t0);
+    })();
+  }
+  (data.packets || []).forEach(function (pk, i) {
+    setTimeout(function () {
+      fly(pk.route, pk.kind);
+      var line = document.createElement('div');
+      line.textContent = '→ ' + pk.route.join(' → ');
+      ledger.prepend(line);
+    }, 400 + i * 1200);
+  });
+  svg.addEventListener('click', function () {
+    if (data.packets && data.packets[0]) fly(data.packets[0].route, data.packets[0].kind);
+  });
+}
+</script>

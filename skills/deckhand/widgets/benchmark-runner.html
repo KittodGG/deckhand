@@ -1,0 +1,90 @@
+<!-- widgets/benchmark-runner.html — theme: deck tokens only -->
+<template id="benchmark-runner-template">
+  <div class="benchmark-runner" data-widget="benchmark-runner">
+    <div class="bench-controls">
+      <button type="button" data-action="run">Run Benchmark</button>
+      <button type="button" data-action="reset">Reset</button>
+    </div>
+    <div class="bench-grid">
+      <div class="bench-card bench-left">
+        <div class="bench-name" data-inject="left.name">Left</div>
+        <div class="bench-metric"><span class="bench-time">0.00</span><span class="bench-unit">s</span></div>
+        <div class="bench-cost">$0.000</div>
+        <div class="bench-bar"><div class="bench-fill fill-left"></div></div>
+        <div class="bench-status">QUEUED</div>
+      </div>
+      <div class="bench-vs">VS</div>
+      <div class="bench-card bench-right">
+        <div class="bench-name" data-inject="right.name">Right</div>
+        <div class="bench-metric"><span class="bench-time">0.00</span><span class="bench-unit">s</span></div>
+        <div class="bench-cost">$0.00</div>
+        <div class="bench-bar"><div class="bench-fill fill-right"></div></div>
+        <div class="bench-status">QUEUED</div>
+      </div>
+    </div>
+    <div class="bench-result" hidden><span data-inject="deltaTime"></span> · <span data-inject="deltaCost"></span></div>
+  </div>
+</template>
+<style>
+.benchmark-runner{display:flex;flex-direction:column;gap:1.2rem;color:var(--ink);font-family:inherit}
+.bench-controls{display:flex;gap:.6rem;justify-content:center}
+.bench-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:1.2rem;align-items:center}
+@media(max-width:700px){.bench-grid{grid-template-columns:1fr}}
+.bench-card{padding:1.2rem 1.3rem;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);box-shadow:var(--shadow-card)}
+.bench-name{font-weight:700;margin-bottom:.8rem}
+.bench-metric{font-size:clamp(2rem,4vw,3rem);font-weight:800;font-variant-numeric:tabular-nums}
+.bench-left .bench-metric{color:var(--accent)} .bench-right .bench-metric{color:var(--counter)}
+.bench-unit{font-size:1rem;color:var(--muted)}
+.bench-cost{font-variant-numeric:tabular-nums;color:var(--ink-soft);margin-top:.3rem}
+.bench-bar{height:6px;background:var(--line);border-radius:3px;margin-top:1rem;overflow:hidden}
+.bench-fill{height:100%;width:0%}
+.fill-left{background:var(--accent)} .fill-right{background:var(--counter)}
+.bench-status{font-size:.72rem;letter-spacing:.1em;color:var(--muted);margin-top:.7rem}
+.bench-vs{font-weight:800;color:var(--muted)}
+.bench-result{padding:.9rem 1rem;background:var(--accent-soft);border-radius:12px;text-align:center;font-variant-numeric:tabular-nums}
+</style>
+<script>
+function initBenchmarkRunner(container, data) {
+  var runBtn = container.querySelector('[data-action="run"]');
+  var resetBtn = container.querySelector('[data-action="reset"]');
+  var left = container.querySelector('.bench-left'), right = container.querySelector('.bench-right');
+  var result = container.querySelector('.bench-result'), running = false, raf = null;
+  runBtn.addEventListener('click', function () {
+    if (running) return; running = true; reset(false);
+    var SPEED = 1.85, t0 = performance.now();
+    var lt = data.left.metrics.time, rt = data.right.metrics.time, lc = data.left.metrics.cost, rc = data.right.metrics.cost;
+    (function loop(now) {
+      var sim = ((now - t0) / 1000) * SPEED;
+      var a = Math.min(sim, lt), b = Math.min(sim, rt);
+      left.querySelector('.bench-time').textContent = a.toFixed(2);
+      left.querySelector('.bench-cost').textContent = '$' + ((a / lt) * lc).toFixed(3);
+      left.querySelector('.bench-fill').style.width = (a / lt * 100) + '%';
+      right.querySelector('.bench-time').textContent = b.toFixed(2);
+      right.querySelector('.bench-cost').textContent = '$' + ((b / rt) * rc).toFixed(2);
+      right.querySelector('.bench-fill').style.width = (b / rt * 100) + '%';
+      if (a >= lt) left.querySelector('.bench-status').textContent = 'COMPLETE ✓';
+      if (b >= rt) right.querySelector('.bench-status').textContent = 'COMPLETE ✓';
+      if (a >= lt && b >= rt) {
+        running = false;
+        result.hidden = false;
+        result.querySelector('[data-inject="deltaTime"]').textContent = 'Δ −' + (rt - lt).toFixed(2) + 's';
+        result.querySelector('[data-inject="deltaCost"]').textContent = 'Δ −$' + (rc - lc).toFixed(2);
+        return;
+      }
+      raf = requestAnimationFrame(loop);
+    })(t0);
+  });
+  function reset(hide) {
+    if (hide === undefined) hide = true;
+    running = false; if (raf) cancelAnimationFrame(raf);
+    left.querySelector('.bench-time').textContent = '0.00';
+    right.querySelector('.bench-time').textContent = '0.00';
+    left.querySelector('.bench-fill').style.width = '0%';
+    right.querySelector('.bench-fill').style.width = '0%';
+    left.querySelector('.bench-status').textContent = 'QUEUED';
+    right.querySelector('.bench-status').textContent = 'QUEUED';
+    if (hide) result.hidden = true;
+  }
+  resetBtn.addEventListener('click', function () { reset(true); });
+}
+</script>

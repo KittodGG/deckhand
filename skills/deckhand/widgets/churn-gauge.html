@@ -1,0 +1,48 @@
+<!-- widgets/churn-gauge.html — deck tokens only -->
+<template id="churn-gauge-template">
+  <div class="churn-gauge" data-widget="churn-gauge">
+    <div class="gauge-label" data-inject="label">Metric</div>
+    <div class="gauge-wrap">
+      <svg viewBox="0 0 160 160" class="gauge-svg" aria-hidden="true">
+        <circle cx="80" cy="80" r="62" fill="none" stroke="var(--line)" stroke-width="11"/>
+        <circle class="gauge-arc" cx="80" cy="80" r="62" fill="none" stroke="var(--warn)" stroke-width="11" stroke-linecap="round" stroke-dasharray="389.56" stroke-dashoffset="389.56"/>
+      </svg>
+      <div class="gauge-value"><div class="gauge-number" data-inject="value">0%</div><div class="gauge-status" data-inject="status">—</div></div>
+    </div>
+    <svg class="gauge-spark" viewBox="0 0 220 44" preserveAspectRatio="none" aria-hidden="true"><polyline class="spark-line" fill="none" stroke="var(--warn)" stroke-width="2" points=""/><circle class="spark-dot" r="3" cx="0" cy="0" opacity="0"/></svg>
+  </div>
+</template>
+<style>
+.churn-gauge{display:flex;flex-direction:column;align-items:center;gap:1rem;color:var(--ink);font-family:inherit}
+.gauge-label{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.gauge-wrap{position:relative;width:200px;height:200px}
+.gauge-svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge-arc{transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1),stroke .5s}
+.gauge-value{position:absolute;inset:0;display:grid;place-items:center;text-align:center;align-content:center}
+.gauge-number{font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums}
+.gauge-status{font-size:.7rem;letter-spacing:.25em;color:var(--muted)}
+.gauge-spark{width:100%;height:44px}
+</style>
+<script>
+function initChurnGauge(container, data) {
+  var C = 389.56, arc = container.querySelector('.gauge-arc');
+  var num = container.querySelector('.gauge-number'), st = container.querySelector('.gauge-status');
+  var line = container.querySelector('.spark-line'), dot = container.querySelector('.spark-dot');
+  var v = data.value, max = data.max || 100, th = data.thresholds || { low: 35, medium: 70 };
+  arc.style.strokeDashoffset = C * (1 - v / max);
+  var col = 'var(--ok)', label = 'LOW';
+  if (v >= th.medium) { col = 'var(--bad)'; label = 'CRITICAL'; }
+  else if (v >= th.low) { col = 'var(--warn)'; label = 'ELEVATED'; }
+  arc.style.stroke = col; line.style.stroke = col; dot.setAttribute('fill', col);
+  num.textContent = v + '%'; st.textContent = data.status || label;
+  if (data.trend && data.trend.length) {
+    var w = 220, h = 44, mx = Math.max.apply(null, data.trend), mn = Math.min.apply(null, data.trend), rg = (mx - mn) || 1;
+    var pts = data.trend.map(function (p, i) {
+      return ((i / Math.max(1, data.trend.length - 1)) * w) + ',' + (h - 4 - ((p - mn) / rg) * (h - 8));
+    }).join(' ');
+    line.setAttribute('points', pts);
+    var last = pts.split(' ').pop().split(',');
+    dot.setAttribute('cx', last[0]); dot.setAttribute('cy', last[1]); dot.setAttribute('opacity', 1);
+  }
+}
+</script>

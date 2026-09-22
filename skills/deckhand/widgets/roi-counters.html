@@ -1,0 +1,35 @@
+<!-- widgets/roi-counters.html — deck tokens only -->
+<template id="roi-counters-template">
+  <div class="roi-counters" data-widget="roi-counters">
+    <div class="roi-grid"></div>
+  </div>
+</template>
+<style>
+.roi-counters{color:var(--ink);font-family:inherit}
+.roi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem}
+.roi-card{border-top:2px solid var(--accent);padding-top:.8rem}
+.roi-card.k-counter{border-color:var(--counter)} .roi-card.k-ok{border-color:var(--ok)}
+.roi-num{font-size:clamp(2rem,4vw,3rem);font-weight:800;font-variant-numeric:tabular-nums}
+.roi-card.k-accent .roi-num{color:var(--accent)} .roi-card.k-counter .roi-num{color:var(--counter)} .roi-card.k-ok .roi-num{color:var(--ok)}
+.roi-label{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+</style>
+<script>
+function initRoiCounters(container, data) {
+  var grid = container.querySelector('.roi-grid');
+  grid.innerHTML = '';
+  (data.counters || []).forEach(function (c) {
+    var card = document.createElement('div');
+    card.className = 'roi-card k-' + (c.kind || 'accent');
+    card.innerHTML = '<div class="roi-num">0' + (c.suffix || '') + '</div><div class="roi-label"></div>';
+    card.querySelector('.roi-label').textContent = c.label;
+    grid.appendChild(card);
+    var t0 = performance.now(), DUR = data.animationDuration || 1200;
+    (function step(now) {
+      var p = Math.min((now - t0) / DUR, 1), e = 1 - Math.pow(1 - p, 3);
+      var v = c.value * e;
+      card.querySelector('.roi-num').textContent = (c.value % 1 ? v.toFixed(1) : Math.round(v)) + (c.suffix || '');
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  });
+}
+</script>

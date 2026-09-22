@@ -1,0 +1,53 @@
+<!-- widgets/inbox-scanner.html — deck tokens only -->
+<template id="inbox-scanner-template">
+  <div class="inbox-scanner" data-widget="inbox-scanner">
+    <div class="scan-bar"><button type="button" data-action="scan">Run Scan</button><span class="scan-count" data-inject="totalScanned">0 queued</span></div>
+    <div class="scan-list"></div>
+  </div>
+</template>
+<style>
+.inbox-scanner{color:var(--ink);font-family:inherit}
+.scan-bar{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.scan-count{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.scan-list{display:grid;gap:0;border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;background:var(--surface)}
+.scan-row{display:grid;grid-template-columns:1fr auto;gap:.8rem;align-items:center;padding:.7rem 1rem;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.scan-row:first-child{border-top:0}
+.scan-row .subj{font-weight:600;color:var(--ink)} .scan-row .from{font-size:.82rem;color:var(--muted)}
+.scan-row.scanning::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--accent-soft),transparent);animation:sweep .7s linear infinite}
+@keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.badge{font-size:.68rem;font-weight:700;letter-spacing:.1em;padding:.3rem .6rem;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.badge.scam{color:var(--bad);border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.badge.clean{color:var(--ok);border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+</style>
+<script>
+function initInboxScanner(container, data) {
+  var list = container.querySelector('.scan-list');
+  var btn = container.querySelector('[data-action="scan"]');
+  function render(items) {
+    list.innerHTML = '';
+    items.forEach(function (m) {
+      var row = document.createElement('div');
+      row.className = 'scan-row';
+      row.innerHTML = '<div><div class="subj"></div><div class="from"></div></div><span class="badge">PENDING</span>';
+      row.querySelector('.subj').textContent = m.subject;
+      row.querySelector('.from').textContent = m.sender + ' · ' + m.confidence + '%';
+      row.dataset.verdict = m.verdict;
+      list.appendChild(row);
+    });
+  }
+  render(data.items || []);
+  btn.addEventListener('click', async function () {
+    var rows = Array.from(list.querySelectorAll('.scan-row'));
+    btn.disabled = true;
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].classList.add('scanning');
+      await new Promise(function (r) { setTimeout(r, 350); });
+      rows[i].classList.remove('scanning');
+      var b = rows[i].querySelector('.badge');
+      b.textContent = rows[i].dataset.verdict === 'scam' ? 'SCAM' : 'CLEAN';
+      b.classList.add(rows[i].dataset.verdict);
+    }
+    btn.disabled = false;
+  });
+}
+</script>
