@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT}} — Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* NIETZSCHE — dark indigo + paper selang-seling.
+   Aksen indigo vivid, avatar gradient, kartu melayang shadow lembut,
+   slide pernyataan center, quote raksasa, panel blob blur, bullet wajik.
+   Surface fixed per slide (art-directed). */
+:root{
+  --navy:#191243; --navy-2:#241b52; --paper:#f7f6f2;
+  --ink-d:#17113a; --mut-d:#6f6a8a; --mut-l:#9a94bd;
+  --ind:#5b4ee4; --ind-soft:rgba(91,78,228,.12);
+  --pad:clamp(2.5rem,6vw,5.5rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --font:"Plus Jakarta Sans",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--navy);color:#fff;font-family:var(--font);font-size:15px;line-height:1.6;
+  overflow:hidden;-webkit-font-smoothing:antialiased;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+::selection{background:var(--ind);color:#fff}
+
+.rail{position:fixed;inset:0 0 auto 0;height:2px;background:rgba(255,255,255,.12);z-index:60}
+.rail__fill{height:100%;width:0;background:var(--ind);transition:width .45s var(--ease)}
+.hud{position:fixed;inset:auto 0 1.2rem 0;z-index:50;display:flex;justify-content:flex-end;gap:.5rem;padding:0 var(--pad);pointer-events:none}
+.hud>*{pointer-events:auto}
+.hbtn{font:600 .68rem/1 var(--font);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
+  background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:.45rem .9rem}
+.hbtn:hover{background:var(--ind);border-color:var(--ind)}
+
+#deck{position:relative;height:100%}
+.slide{position:absolute;inset:0;background:var(--navy);color:#fff;padding:5rem var(--pad) 4rem;
+  opacity:0;visibility:hidden;transition:opacity .45s var(--ease),visibility .45s}
+.slide.is-active{opacity:1;visibility:visible}
+.slide--paper{background:var(--paper);color:var(--ink-d)}
+.inner{max-width:1120px;margin:0 auto;height:100%;display:flex;flex-direction:column;position:relative}
+
+/* tekstur dot-grid pojok */
+.tex::after{content:"";position:absolute;top:-1rem;right:-1rem;width:170px;height:110px;
+  background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1px);background-size:11px 11px;pointer-events:none}
+.slide--paper.tex::after{background-image:radial-gradient(rgba(23,17,58,.14) 1px,transparent 1px)}
+
+/* label small-caps */
+.lab{font-size:.66rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mut-l);margin:0 0 1.1rem}
+.slide--paper .lab{color:var(--mut-d)}
+
+h1,h2{font-weight:700;letter-spacing:-.02em;line-height:1.12;margin:0 0 1.2rem;text-wrap:balance}
+h1{font-size:clamp(2.2rem,5vw,3.9rem)}
+h2{font-size:clamp(1.6rem,3.4vw,2.5rem)}
+.ind{color:var(--ind)}
+.lead{font-size:clamp(.95rem,1.4vw,1.15rem);opacity:.9;max-width:56ch;margin:0 0 1.6rem}
+.slide--paper .lead{opacity:1;color:var(--mut-d)}
+
+/* mark sunburst */
+.burst{width:44px;height:44px;color:currentColor}
+.burst line{stroke:currentColor;stroke-width:5;stroke-linecap:round}
+
+/* slide pernyataan: center + garis vertikal */
+.center .inner{align-items:center;justify-content:center;text-align:center}
+.center h1{max-width:20ch}
+.vrule{width:1px;height:64px;background:rgba(255,255,255,.4);margin:1.6rem 0}
+.caps{font-size:.68rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--mut-l)}
+
+/* baris avatar + news cards */
+.prow{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:start;flex:1}
+.item{display:grid;grid-template-columns:46px 1fr;gap:1rem;align-items:start;margin-bottom:1.5rem}
+.av{width:46px;height:46px;border-radius:50%}
+.av--1{background:linear-gradient(135deg,#8f7bff,#4b3fd6)}
+.av--2{background:linear-gradient(135deg,#c86bd8,#8f4bd6)}
+.av--3{background:linear-gradient(135deg,#f5d06a,#e8a13c)}
+.item h3{margin:0 0 .25rem;font-size:.92rem;font-weight:700}
+.item p{margin:0;font-size:.78rem;color:var(--mut-d)}
+.news{background:#fff;color:var(--ink-d);border-radius:10px;padding:.85rem 1rem;max-width:360px;
+  box-shadow:0 14px 34px rgba(23,17,58,.16);margin-bottom:1rem}
+.news+.news{margin-left:2.2rem}
+.news__top{display:flex;align-items:center;gap:.5rem;font-size:.6rem;letter-spacing:.14em;color:var(--mut-d);text-transform:uppercase}
+.news__top .ic{width:16px;height:16px;border-radius:4px;background:#e4506b;color:#fff;display:grid;place-items:center;font-size:.55rem;font-weight:800}
+.news__top .now{margin-left:auto;letter-spacing:0;text-transform:none}
+.news h4{margin:.45rem 0 .2rem;font-size:.82rem;font-weight:800}
+.news p{margin:0;font-size:.72rem;color:var(--mut-d)}
+@media(max-width:900px){.prow{grid-template-columns:1fr}}
+
+/* quote slide */
+.qmark{font-size:5.5rem;line-height:.6;color:var(--ind);font-weight:800;margin:0 0 .4rem}
+.quote{font-size:clamp(1.4rem,3vw,2.3rem);font-weight:600;line-height:1.25;max-width:26ch;margin:0 0 2rem}
+.attrib{display:flex;align-items:center;gap:.9rem}
+.attrib .av{width:40px;height:40px;background:linear-gradient(135deg,#8f7bff,#e46bd0)}
+.attrib .n{font-size:.85rem;font-weight:700}
+.attrib .t{font-size:.72rem;color:var(--mut-l)}
+
+/* stat cards */
+.scards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.8rem}
+.scard{background:#fff;border-radius:12px;padding:1.6rem 1.5rem;box-shadow:0 10px 28px rgba(23,17,58,.10)}
+.scard .n{font-size:clamp(2rem,4vw,3rem);font-weight:800;color:var(--ind);line-height:1}
+.scard .l{font-size:.76rem;color:var(--mut-d);margin-top:.5rem}
+@media(max-width:900px){.scards{grid-template-columns:1fr}}
+
+/* split + panel blob */
+.split{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,4vw,3.5rem);flex:1;align-items:stretch}
+.panel{background:var(--ind);border-radius:0;position:relative;overflow:hidden;min-height:300px}
+.blob{position:absolute;left:50%;transform:translateX(-50%);width:64%;height:56px;border-radius:28px;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));filter:blur(7px)}
+ul.dia{list-style:none;margin:1.4rem 0 0;padding:0;display:grid;gap:1.1rem;max-width:46ch}
+ul.dia li{display:grid;grid-template-columns:12px 1fr;gap:.9rem;font-size:.86rem;color:var(--mut-d)}
+ul.dia li::before{content:"";width:8px;height:8px;background:var(--ind);transform:rotate(45deg);margin-top:.45em}
+ul.dia b{color:var(--ind);font-weight:700}
+@media(max-width:900px){.split{grid-template-columns:1fr}.panel{min-height:180px}}
+
+.reveal{opacity:0;transform:translateY(12px)}
+.slide.is-active .reveal{animation:rise .5s var(--ease) forwards;animation-delay:calc(var(--i,0)*70ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+.overview{position:fixed;inset:0;z-index:70;background:rgba(25,18,67,.95);backdrop-filter:blur(14px);padding:5rem var(--pad) 3rem;overflow:auto}
+.overview h2{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mut-l);margin:0 0 1.4rem}
+.overview__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem}
+.ov-card{text-align:left;cursor:pointer;font-family:var(--font);background:var(--navy-2);color:#fff;
+  border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:1rem;display:grid;gap:.5rem;min-height:96px}
+.ov-card:hover,.ov-card[aria-current="true"]{border-color:var(--ind)}
+.ov-card__n{font-size:.66rem;letter-spacing:.14em;color:var(--mut-l)}
+.ov-card__t{font-size:.9rem;font-weight:600}
+
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  body{overflow:visible}
+  .rail,.hud,.overview{display:none!important}
+  #deck{height:auto}
+  .slide{position:static;opacity:1!important;visibility:visible!important;height:auto;min-height:160mm;break-after:page}
+  .reveal{opacity:1!important;transform:none!important;animation:none!important}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="rail"><div class="rail__fill" id="rail"></div></div>
+<header class="hud">
+  <button class="hbtn" id="btnOverview" type="button">Index [O]</button>
+  <span class="hbtn"><span id="cur">1</span>/<span id="tot">1</span></span>
+</header>
+
+<main id="deck">
+
+<!-- 1 · COVER (navy): sunburst + wordmark -->
+<section class="slide tex" data-title="Cover">
+  <div class="inner center">
+    <svg class="burst reveal" viewBox="0 0 100 100" aria-hidden="true">
+      <line x1="50" y1="6" x2="50" y2="30"/><line x1="50" y1="70" x2="50" y2="94"/>
+      <line x1="6" y1="50" x2="30" y2="50"/><line x1="70" y1="50" x2="94" y2="50"/>
+      <line x1="19" y1="19" x2="36" y2="36"/><line x1="64" y1="64" x2="81" y2="81"/>
+      <line x1="81" y1="19" x2="64" y2="36"/><line x1="36" y1="64" x2="19" y2="81"/>
+      <line x1="50" y1="6" x2="50" y2="30" transform="rotate(22.5 50 50)"/><line x1="50" y1="6" x2="50" y2="30" transform="rotate(-22.5 50 50)"/>
+      <line x1="50" y1="70" x2="50" y2="94" transform="rotate(22.5 50 50)"/><line x1="50" y1="70" x2="50" y2="94" transform="rotate(-22.5 50 50)"/>
+    </svg>
+    <h1 class="reveal" style="margin-top:1.4rem">{{PRODUCT}}</h1>
+  </div>
+</section>
+
+<!-- 2 · PERNYATAAN (navy): center + vrule + caps -->
+<section class="slide center tex" data-title="Pernyataan">
+  <div class="inner">
+    <svg class="burst reveal" viewBox="0 0 100 100" aria-hidden="true" style="width:30px;height:30px">
+      <line x1="50" y1="6" x2="50" y2="30"/><line x1="50" y1="70" x2="50" y2="94"/>
+      <line x1="6" y1="50" x2="30" y2="50"/><line x1="70" y1="50" x2="94" y2="50"/>
+      <line x1="19" y1="19" x2="36" y2="36"/><line x1="64" y1="64" x2="81" y2="81"/>
+      <line x1="81" y1="19" x2="64" y2="36"/><line x1="36" y1="64" x2="19" y2="81"/>
+    </svg>
+    <h1 class="reveal" style="margin-top:1.6rem">{{HOOK_STATEMENT}}</h1>
+    <div class="vrule reveal"></div>
+    <p class="caps reveal">{{CAPS_PUNCHLINE}}</p>
+  </div>
+</section>
+
+<!-- 3 · PROBLEM (paper): avatar rows + news cards -->
+<section class="slide slide--paper tex" data-title="Problem">
+  <div class="inner">
+    <p class="lab reveal">Problem</p>
+    <h2 class="reveal">{{PROBLEM_TITLE}}</h2>
+    <div class="prow">
+      <div>
+        <div class="item reveal"><span class="av av--1"></span><div><h3>{{P1_T}}</h3><p>{{P1_D}}</p></div></div>
+        <div class="item reveal"><span class="av av--2"></span><div><h3>{{P2_T}}</h3><p>{{P2_D}}</p></div></div>
+        <div class="item reveal"><span class="av av--3"></span><div><h3>{{P3_T}}</h3><p>{{P3_D}}</p></div></div>
+      </div>
+      <div>
+        <div class="news reveal"><div class="news__top"><span class="ic">N</span>News<span class="now">now</span></div>
+          <h4>{{NEWS1_SRC}}</h4><p>{{NEWS1_H}}</p></div>
+        <div class="news reveal"><div class="news__top"><span class="ic">N</span>News<span class="now">now</span></div>
+          <h4>{{NEWS2_SRC}}</h4><p>{{NEWS2_H}}</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · QUOTE (navy) -->
+<section class="slide" data-title="Quote">
+  <div class="inner" style="justify-content:center">
+    <p class="qmark reveal">“</p>
+    <p class="quote reveal">{{QUOTE_TEXT}}</p>
+    <div class="attrib reveal">
+      <span class="av"></span>
+      <div><div class="n">{{QUOTE_NAME}}</div><div class="t">{{QUOTE_ROLE}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · STATS (paper): headline indigo + stat cards -->
+<section class="slide slide--paper tex" data-title="Traction">
+  <div class="inner">
+    <p class="lab reveal">What we've built</p>
+    <h2 class="reveal"><span class="ind">{{STATS_HEAD_A}}</span> {{STATS_HEAD_B}}</h2>
+    <div class="scards">
+      <div class="scard reveal"><div class="n">{{S1_N}}</div><div class="l">{{S1_L}}</div></div>
+      <div class="scard reveal"><div class="n">{{S2_N}}</div><div class="l">{{S2_L}}</div></div>
+      <div class="scard reveal"><div class="n">{{S3_N}}</div><div class="l">{{S3_L}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · SPLIT (paper + panel blob): bullet wajik -->
+<section class="slide slide--paper" data-title="How">
+  <div class="inner">
+    <div class="split">
+      <div>
+        <h2 class="reveal">{{HOW_TITLE}}</h2>
+        <ul class="dia">
+          <li class="reveal">{{D1_A}} <b>{{D1_B}}</b> {{D1_C}}</li>
+          <li class="reveal">{{D2_A}} <b>{{D2_B}}</b> {{D2_C}}</li>
+          <li class="reveal">{{D3_A}} <b>{{D3_B}}</b> {{D3_C}}</li>
+        </ul>
+      </div>
+      <div class="panel reveal">
+        <span class="blob" style="top:26%"></span>
+        <span class="blob" style="top:44%"></span>
+        <span class="blob" style="top:62%"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview" hidden>
+  <h2>Index</h2>
+  <div class="overview__grid" id="ovGrid"></div>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  var tot = document.getElementById('tot');
+  var overview = document.getElementById('overview');
+  var ovGrid = document.getElementById('ovGrid');
+  var btnOverview = document.getElementById('btnOverview');
+  var i = 0;
+  tot.textContent = slides.length;
+  slides.forEach(function (s) {
+    s.querySelectorAll('.reveal').forEach(function (el, n) { el.style.setProperty('--i', n); });
+  });
+  function go(n, push) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+    cur.textContent = i + 1;
+    if (rail) rail.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (push !== false) history.replaceState(null, '', '#slide-' + (i + 1));
+    Array.prototype.forEach.call(ovGrid.children, function (c, k) {
+      c.setAttribute('aria-current', k === i ? 'true' : 'false');
+    });
+  }
+  slides.forEach(function (s, k) {
+    var b = document.createElement('button');
+    b.className = 'ov-card'; b.type = 'button';
+    b.innerHTML = '<span class="ov-card__n">' + String(k + 1).padStart(2, '0') + '</span><span class="ov-card__t"></span>';
+    b.lastChild.textContent = s.dataset.title || ('Slide ' + (k + 1));
+    b.addEventListener('click', function () { toggleOverview(false); go(k); });
+    ovGrid.appendChild(b);
+  });
+  function toggleOverview(force) {
+    var open = typeof force === 'boolean' ? force : overview.hidden;
+    overview.hidden = !open;
+  }
+  btnOverview.addEventListener('click', function () { toggleOverview(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') { toggleOverview(false); return; }
+    if (k === 'o' || k === 'O') { toggleOverview(); return; }
+    if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+      return;
+    }
+    if (!overview.hidden) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+  });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.hud, .overview, a, button')) return;
+    go(i + 1);
+  });
+  function fromHash(push) {
+    var m = /^#slide-(\d+)$/.exec(location.hash);
+    go(m ? parseInt(m[1], 10) - 1 : 0, push);
+  }
+  window.addEventListener('hashchange', function () { fromHash(false); });
+  fromHash(false);
+})();
+</script>
+</body>
+</html>
