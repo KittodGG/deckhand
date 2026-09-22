@@ -264,6 +264,33 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
 @keyframes grow{to{transform:scaleY(1)}}
 
 /* ─────────────────────────────────────────────────────────────
+   5b. WIDGETS — theme-conformant slots.
+   Semua widget HARUS pakai var(--...) deck. Tidak ada palette sendiri.
+   ───────────────────────────────────────────────────────────── */
+[data-widget-slot]{width:100%;min-height:120px}
+.widget-container{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-card);box-shadow:var(--shadow-card);
+  padding:1.5rem 1.6rem;color:var(--ink);
+  font-family:"Manrope",system-ui,sans-serif;
+}
+.widget-container .mono{font-variant-numeric:tabular-nums}
+.widget-error{
+  padding:1rem;border:1px dashed var(--bad);border-radius:12px;
+  color:var(--bad);font-size:.9rem;
+}
+.widget-container button{
+  font-family:inherit;font-weight:600;font-size:.85rem;
+  padding:.55rem 1rem;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);
+}
+.widget-container button:hover{border-color:var(--line-strong)}
+.widget-container button[data-action="run"],
+.widget-container .btn-primary{
+  background:var(--accent);border-color:transparent;color:#fff;
+}
+
+/* ─────────────────────────────────────────────────────────────
    6. OVERVIEW
    ───────────────────────────────────────────────────────────── */
 .overview{
@@ -535,6 +562,8 @@ ul.points .spark{margin-top:.42em;font-size:.8em}
   <div class="overview__grid" id="ovGrid"></div>
 </div>
 
+<!-- Widget Loader — theme-aware (memakai var(--...) deck, ikut data-theme + tombol D) -->
+<script src="widget-loader.js"></script>
 <script>
 (function () {
   var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
