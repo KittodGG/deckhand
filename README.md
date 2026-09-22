@@ -171,7 +171,6 @@ Progress update umum. Manrope + Playfair italic, hangat, light/dark bebas
 (`data-theme`, tombol `D`).
 
 ![Editorial cover](showcase/editorial-cover.png)
-![Editorial overview](showcase/editorial-overview.png)
 
 | Slide | Tampilan |
 |---|---|
@@ -192,7 +191,6 @@ wireframe isometric, bar chart, orb stat. Surface fixed per slide
 (abaikan `data-theme`).
 
 ![Galaxy Report cover](showcase/galaxy-report-cover.png)
-![Galaxy Report overview](showcase/galaxy-report-overview.png)
 
 | Slide | Tampilan |
 |---|---|
@@ -208,7 +206,6 @@ Pitch disruptif / AI ethics / visi produk. Navy + paper, aksen indigo, news
 card melayang, quote raksasa, panel blob blur. Surface fixed per slide.
 
 ![Nietzsche Pitch cover](showcase/nietzsche-pitch-cover.png)
-![Nietzsche Pitch overview](showcase/nietzsche-pitch-overview.png)
 
 | Slide | Tampilan |
 |---|---|
@@ -226,7 +223,6 @@ angka lingkaran, kolase mockup + tombol Play, monogram huruf raksasa.
 Surface fixed per slide.
 
 ![BB Agency cover](showcase/bb-agency-cover.png)
-![BB Agency overview](showcase/bb-agency-overview.png)
 
 | Slide | Tampilan |
 |---|---|
@@ -243,7 +239,6 @@ Laporan metrik untuk audiens teknis-data. Dark mono, tabel data, bar chart,
 corner-bracket, scanline. Mendukung `data-theme`.
 
 ![Terminal cover](showcase/terminal-cover.png)
-![Terminal overview](showcase/terminal-overview.png)
 
 | Slide | Tampilan |
 |---|---|
@@ -259,7 +254,6 @@ Pitch garang. Serif Fraunces raksasa, hard-shadow solid, radius 0, satu warna
 merah, asterisk bullet. Mendukung `data-theme`.
 
 ![Manifesto cover](showcase/manifesto-cover.png)
-![Manifesto overview](showcase/manifesto-overview.png)
 
 | Slide | Tampilan |
 |---|---|
@@ -275,7 +269,6 @@ Company deck formal. Grid 12-kolom ketat, satu font, footer page number di
 tiap slide, soft shadow, pill bulat. Mendukung `data-theme`.
 
 ![Swiss cover](showcase/swiss-cover.png)
-![Swiss overview](showcase/swiss-overview.png)
 
 | Slide | Tampilan |
 |---|---|
