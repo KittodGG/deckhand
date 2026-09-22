@@ -1,0 +1,27 @@
+<!-- widgets/time-machine.html — deck tokens only -->
+<template id="time-machine-template">
+  <div class="tmachine" data-widget="time-machine">
+    <input type="range" class="tm-range" min="0" max="100" value="100" aria-label="Pilih commit">
+    <div class="tm-state">Geser untuk lihat state repo.</div>
+  </div>
+</template>
+<style>
+.tmachine{color:var(--ink);font-family:inherit}
+.tm-range{width:100%;accent-color:var(--counter)}
+.tm-state{margin-top:1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:1rem;font-size:.88rem;color:var(--ink-soft)}
+.tm-state code{font-variant-numeric:tabular-nums}
+</style>
+<script>
+function initTimeMachine(container, data) {
+  var range = container.querySelector('.tm-range'), state = container.querySelector('.tm-state');
+  var commits = data.commits || [], states = data.states || {};
+  range.max = Math.max(0, commits.length - 1); range.value = range.max;
+  function show(i) {
+    var c = commits[i]; if (!c) return;
+    var s = states[c.sha] || { files: [], stats: {} };
+    state.innerHTML = '<strong>' + c.sha.slice(0, 7) + '</strong> ' + c.message + '<br><small>' + c.date + ' · ' + (s.files || []).length + ' files · ' + ((s.stats || {}).lines || 0) + ' lines</small><br><code>' + (s.files || []).join(', ') + '</code>';
+  }
+  range.addEventListener('input', function () { show(Number(range.value)); });
+  show(Number(range.value));
+}
+</script>

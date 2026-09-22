@@ -1,0 +1,31 @@
+<!-- widgets/release-train.html — deck tokens only -->
+<template id="release-train-template">
+  <div class="rtrain" data-widget="release-train"><div class="rt-track"></div><div class="rt-detail">Klik gerbong untuk changelog.</div></div>
+</template>
+<style>
+.rtrain{color:var(--ink);font-family:inherit}
+.rt-track{display:flex;align-items:center;gap:0;overflow-x:auto;padding:.5rem 0}
+.rt-car{flex:none;border:1px solid var(--line);background:var(--surface);padding:.8rem 1rem;min-width:130px;text-align:center;cursor:pointer}
+.rt-car:first-child{border-radius:12px 0 0 12px} .rt-car:last-child{border-radius:0 12px 12px 0}
+.rt-car.on{border-color:var(--accent);background:var(--accent-soft)}
+.rt-car strong{display:block} .rt-car span{font-size:.75rem;color:var(--muted)}
+.rt-link{flex:none;width:28px;height:2px;background:var(--line-strong)}
+.rt-detail{margin-top:1rem;font-size:.88rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:1rem}
+</style>
+<script>
+function initReleaseTrain(container, data) {
+  var track = container.querySelector('.rt-track'), detail = container.querySelector('.rt-detail');
+  (data.releases || []).forEach(function (r, i) {
+    if (i > 0) { var l = document.createElement('div'); l.className = 'rt-link'; track.appendChild(l); }
+    var c = document.createElement('button');
+    c.type = 'button'; c.className = 'rt-car' + (i === 0 ? ' on' : '');
+    c.innerHTML = '<strong>' + r.version + '</strong><span>' + r.date + ' · ' + r.commits + ' commits</span>';
+    c.addEventListener('click', function () {
+      track.querySelectorAll('.rt-car').forEach(function (x) { x.classList.remove('on'); });
+      c.classList.add('on');
+      detail.innerHTML = '<strong>' + r.version + '</strong> — ' + (r.highlights || []).join(', ');
+    });
+    track.appendChild(c);
+  });
+}
+</script>

@@ -1,0 +1,33 @@
+<!-- widgets/decision-tree.html — deck tokens only -->
+<template id="decision-tree-template">
+  <div class="dtree" data-widget="decision-tree"><div class="dt-nodes"></div></div>
+</template>
+<style>
+.dtree{color:var(--ink);font-family:inherit}
+.dt-nodes{display:grid;gap:.4rem;max-width:520px}
+.dt-node{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:.7rem 1rem;font-size:.88rem;cursor:pointer;text-align:left;width:100%;color:var(--ink)}
+.dt-node:hover{border-color:var(--accent)}
+.dt-node.decision{border-style:dashed}
+.dt-edge{font-size:.72rem;color:var(--muted);padding-left:1rem}
+</style>
+<script>
+function initDecisionTree(container, data) {
+  var box = container.querySelector('.dt-nodes'); box.innerHTML = '';
+  var edges = data.edges || [];
+  (data.nodes || []).forEach(function (n) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'dt-node ' + (n.type || '');
+    b.textContent = n.label;
+    b.addEventListener('click', function () {
+      var outs = edges.filter(function (e) { return e.from === n.id; });
+      b.title = outs.map(function (e) { return (e.condition ? e.condition + ' → ' : '') + e.to; }).join(', ');
+    });
+    box.appendChild(b);
+    edges.filter(function (e) { return e.from === n.id; }).forEach(function (e) {
+      var d = document.createElement('div'); d.className = 'dt-edge';
+      d.textContent = (e.condition ? e.condition + ' → ' : '→ ') + e.to;
+      box.appendChild(d);
+    });
+  });
+}
+</script>

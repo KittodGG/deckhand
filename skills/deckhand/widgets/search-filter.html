@@ -1,0 +1,30 @@
+<!-- widgets/search-filter.html — deck tokens only -->
+<template id="search-filter-template">
+  <div class="sfilter" data-widget="search-filter">
+    <input type="search" class="sf-input" placeholder="Cari commits, author, tag..." aria-label="Search">
+    <div class="sf-list"></div>
+  </div>
+</template>
+<style>
+.sfilter{color:var(--ink);font-family:inherit}
+.sf-input{width:100%;padding:.7rem 1rem;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:.9rem}
+.sf-input:focus{outline:2px solid var(--accent);outline-offset:2px}
+.sf-list{display:grid;gap:0;margin-top:1rem;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.sf-item{padding:.7rem 1rem;border-top:1px solid var(--line);font-size:.88rem}
+.sf-item:first-child{border-top:0} .sf-item small{color:var(--muted)}
+</style>
+<script>
+function initSearchFilter(container, data) {
+  var input = container.querySelector('.sf-input'), list = container.querySelector('.sf-list');
+  var items = data.items || [];
+  function render(q) {
+    q = (q || '').toLowerCase();
+    var hits = items.filter(function (it) { return JSON.stringify(it).toLowerCase().includes(q); }).slice(0, 20);
+    list.innerHTML = hits.map(function (it) {
+      return '<div class="sf-item"><strong>' + it.title + '</strong><br><small>' + (it.author || '') + ' · ' + (it.date || '') + '</small></div>';
+    }).join('') || '<div class="sf-item"><small>Tidak ada hasil.</small></div>';
+  }
+  input.addEventListener('input', function () { render(input.value); });
+  render('');
+}
+</script>

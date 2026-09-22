@@ -1,0 +1,28 @@
+<!-- widgets/before-after-toggle.html — deck tokens only -->
+<template id="before-after-toggle-template">
+  <div class="ba" data-widget="before-after-toggle">
+    <div class="ba-switch"><button type="button" data-v="before" class="on">Before</button><button type="button" data-v="after">After</button></div>
+    <div class="ba-body"><h4 class="ba-title"></h4><p class="ba-content"></p></div>
+  </div>
+</template>
+<style>
+.ba{color:var(--ink);font-family:inherit}
+.ba-switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.ba-switch button{border:0;background:transparent;color:var(--muted);padding:.5rem 1.1rem;cursor:pointer;font:inherit;font-size:.85rem;font-weight:600}
+.ba-switch button.on{background:var(--accent);color:white}
+.ba-body{margin-top:1rem;padding:1.2rem;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface)}
+.ba-title{margin:0 0 .5rem;color:var(--ink)} .ba-content{margin:0;color:var(--ink-soft)}
+</style>
+<script>
+function initBeforeAfterToggle(container, data) {
+  var title = container.querySelector('.ba-title'), content = container.querySelector('.ba-content');
+  var btns = Array.from(container.querySelectorAll('.ba-switch button'));
+  function show(v) {
+    btns.forEach(function (b) { b.classList.toggle('on', b.dataset.v === v); });
+    var d = data[v] || {};
+    title.textContent = d.title || v; content.textContent = d.content || '';
+  }
+  btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.v); }); });
+  show('before');
+}
+</script>
