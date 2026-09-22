@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT}} — Company Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* SWISS (eks-BB Agency) — Swiss-modernist mandiri.
+   Grid 12-kolom ketat, Space Grotesk saja, section bernomor,
+   footer page number tiap slide, soft shadow, pill bulat. */
+:root{
+  color-scheme:light;
+  --ground:#f3f5f7; --surface:#ffffff;
+  --ink:#04090a; --ink-soft:#40343b; --muted:#707171;
+  --line:rgba(4,9,10,.10); --line-strong:rgba(4,9,10,.20);
+  --accent:#0d22e4; --accent-soft:rgba(13,34,228,.07);
+  --slate:#b4cad2;
+  --shadow:0 1px 2px rgba(4,9,10,.05),0 10px 30px rgba(4,9,10,.07);
+  --r-pill:999px; --r-card:14px;
+  --pad-x:clamp(3rem,7vw,7rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --font:"Space Grotesk",system-ui,sans-serif;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0b0f12; --surface:#141a1e;
+  --ink:#eef2f4; --ink-soft:#c3ccd1; --muted:#8a949a;
+  --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.22);
+  --accent:#5b6cff; --accent-soft:rgba(91,108,255,.14);
+  --slate:#2a3a44;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--font);font-size:16px;line-height:1.6;overflow:hidden;
+  -webkit-font-smoothing:antialiased}
+::selection{background:var(--accent-soft);color:var(--accent)}
+.rail{position:fixed;inset:0 0 auto 0;height:3px;background:var(--line);z-index:60}
+.rail__fill{height:100%;width:0;background:var(--accent);transition:width .45s var(--ease)}
+.hud{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.5rem var(--pad-x) 0;pointer-events:none}
+.hud>*{pointer-events:auto}
+.hud__right{display:flex;gap:.5rem;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:.5rem;padding:.42rem .95rem;border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);
+  font-size:.8rem;font-weight:600;letter-spacing:.01em;color:var(--ink-soft)}
+button.pill{cursor:pointer;font-family:inherit}
+button.pill:hover{border-color:var(--accent);color:var(--accent)}
+.pill--accent{background:var(--accent);border-color:var(--accent);color:white}
+.pill kbd{font:600 .66rem/1 inherit;padding:.15rem .35rem;border-radius:5px;background:var(--line);color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+#deck{position:relative;height:100%;width:100%}
+.slide{position:absolute;inset:0;display:flex;align-items:center;
+  padding:5.5rem var(--pad-x) 4.5rem;opacity:0;visibility:hidden;
+  transition:opacity .4s var(--ease),visibility .4s}
+.slide.is-active{opacity:1;visibility:visible}
+.slide__inner{width:100%;max-width:1120px;margin-inline:auto;position:relative}
+.slide__foot{position:absolute;left:0;right:0;bottom:-2.4rem;display:flex;
+  justify-content:space-between;align-items:center;border-top:1px solid var(--line);
+  padding-top:.8rem;font-size:.72rem;font-weight:500;letter-spacing:.06em;color:var(--muted)}
+.slide__foot .pg{font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(1.2rem,2.5vw,2.2rem);align-items:center}
+.c-7{grid-column:span 7}.c-5{grid-column:span 5}.c-6{grid-column:span 6}
+.c-4{grid-column:span 4}.c-8{grid-column:span 8}.c-12{grid-column:span 12}
+@media(max-width:900px){.c-7,.c-5,.c-6,.c-4,.c-8{grid-column:span 12}}
+.kicker{display:flex;align-items:center;gap:.7rem;font-size:.74rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 1.4rem}
+.kicker .no{display:inline-flex;align-items:center;justify-content:center;width:1.9em;height:1.9em;
+  border:1.5px solid var(--accent);border-radius:50%;font-size:.7rem;letter-spacing:0}
+h1.hero{font-size:clamp(2.8rem,7vw,5.8rem);font-weight:700;line-height:.98;letter-spacing:-.035em;margin:0 0 1.5rem;text-wrap:balance}
+h2.title{font-size:clamp(1.9rem,4vw,3.2rem);font-weight:700;line-height:1.04;letter-spacing:-.03em;margin:0 0 1.2rem;text-wrap:balance}
+.lead{font-size:clamp(1.05rem,1.6vw,1.35rem);color:var(--ink-soft);max-width:52ch;margin:0 0 1.6rem}
+p{color:var(--ink-soft);max-width:58ch}
+strong{font-weight:700;color:var(--ink)}
+.toc{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.toc li{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:baseline;
+  padding:.85rem 0;border-top:1px solid var(--line)}
+.toc li:last-child{border-bottom:1px solid var(--line)}
+.toc .no{font-size:.74rem;font-weight:700;color:var(--accent);letter-spacing:.08em}
+.toc .t{font-size:clamp(1rem,1.6vw,1.35rem);font-weight:600;color:var(--ink)}
+.toc .t span{color:var(--muted);font-weight:400;font-size:.85em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:1.6rem 1.7rem;box-shadow:var(--shadow);height:100%}
+.card .idx{font-size:.74rem;font-weight:700;color:var(--accent);letter-spacing:.08em}
+.card h3{margin:.6rem 0 .5rem;font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
+.card p{font-size:.92rem;margin:0}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:1.8rem}
+@media(max-width:900px){.cards{grid-template-columns:1fr}}
+.case{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);
+  border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow);background:var(--surface)}
+.case__img{background:linear-gradient(135deg,var(--accent),var(--slate));min-height:280px;position:relative}
+.case__img::after{content:"STUDY";position:absolute;inset:0;display:grid;place-items:center;
+  color:rgba(255,255,255,.5);font-weight:700;letter-spacing:.3em;font-size:.9rem}
+.case__body{padding:2rem 2.2rem}
+.case__body .client{font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.case__body h3{font-size:1.6rem;font-weight:700;letter-spacing:-.02em;margin:.6rem 0 .8rem}
+.case__metrics{display:flex;gap:2rem;margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.case__metrics .n{font-size:1.8rem;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.case__metrics .l{display:block;font-size:.72rem;color:var(--muted);margin-top:.2rem}
+@media(max-width:900px){.case{grid-template-columns:1fr}}
+.stats{display:flex;gap:clamp(2rem,5vw,4rem);margin-top:2rem}
+.stat{border-top:2px solid var(--ink);padding-top:.9rem;min-width:120px}
+.stat .n{display:block;font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:700;line-height:1;letter-spacing:-.03em}
+.stat .n em{font-style:normal;color:var(--accent)}
+.stat .l{display:block;margin-top:.5rem;font-size:.8rem;color:var(--muted)}
+.reveal{opacity:0;transform:translateY(12px)}
+.slide.is-active .reveal{animation:rise .45s var(--ease) forwards;animation-delay:calc(var(--i,0)*60ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+.overview{position:fixed;inset:0;z-index:70;background:rgba(243,245,247,.94);backdrop-filter:blur(18px);
+  padding:6rem var(--pad-x) 3rem;overflow:auto}
+.overview h2{font-size:1.05rem;font-weight:700;letter-spacing:.02em;color:var(--muted);margin:0 0 1.6rem}
+.overview__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.9rem}
+.ov-card{text-align:left;cursor:pointer;font-family:inherit;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow);
+  padding:1.1rem 1.2rem;display:grid;gap:.55rem;min-height:104px;transition:border-color .2s,transform .2s var(--ease)}
+.ov-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.ov-card[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.ov-card__n{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--accent)}
+.ov-card__t{font-size:.95rem;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+@page{size:A4 landscape;margin:12mm}
+@media print{
+  body{overflow:visible;background:#fff;color:#000}
+  .rail,.hud,.overview{display:none!important}
+  #deck{height:auto}
+  .slide{position:static;opacity:1!important;visibility:visible!important;height:auto;min-height:170mm;padding:0 0 10mm;break-after:page}
+  .slide__foot{position:static;margin-top:8mm}
+  .reveal{opacity:1!important;transform:none!important;animation:none!important}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="rail"><div class="rail__fill" id="rail"></div></div>
+<header class="hud">
+  <span class="pill"><span class="dot"></span>{{PRODUCT}}</span>
+  <nav class="hud__right">
+    <button class="pill" id="btnOverview" type="button">Ikhtisar <kbd>O</kbd></button>
+    <span class="pill"><span id="cur">1</span> / <span id="tot">1</span></span>
+  </nav>
+</header>
+<main id="deck">
+<section class="slide" data-title="Cover">
+  <div class="slide__inner">
+    <div class="grid">
+      <div class="c-7">
+        <p class="kicker reveal"><span class="no">®</span> Company Deck · {{YEAR}}</p>
+        <h1 class="hero reveal">{{HERO_A}} <span style="color:var(--accent)">{{HERO_B}}</span></h1>
+        <p class="lead reveal">{{ONE_LINE_SUMMARY}}</p>
+      </div>
+      <div class="c-5">
+        <ul class="toc reveal">
+          <li><span class="no">01</span><span class="t">{{TOC1}}</span></li>
+          <li><span class="no">02</span><span class="t">{{TOC2}}</span></li>
+          <li><span class="no">03</span><span class="t">{{TOC3}}</span></li>
+          <li><span class="no">04</span><span class="t">{{TOC4}}</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide__foot reveal"><span>{{PRODUCT}} — untuk {{AUDIENCE}}</span><span class="pg">01</span></div>
+  </div>
+</section>
+<section class="slide" data-title="Services">
+  <div class="slide__inner">
+    <p class="kicker reveal"><span class="no">02</span> Services</p>
+    <h2 class="title reveal">{{SERVICES_TITLE}}</h2>
+    <div class="cards">
+      <div class="card reveal"><span class="idx">S.01</span><h3>Strategy</h3><p>{{ITEM_1}}</p></div>
+      <div class="card reveal"><span class="idx">S.02</span><h3>Design</h3><p>{{ITEM_2}}</p></div>
+      <div class="card reveal"><span class="idx">S.03</span><h3>Engineering</h3><p>{{ITEM_3}}</p></div>
+    </div>
+    <div class="slide__foot reveal"><span>Services</span><span class="pg">02</span></div>
+  </div>
+</section>
+<section class="slide" data-title="Project">
+  <div class="slide__inner">
+    <p class="kicker reveal"><span class="no">03</span> Selected project</p>
+    <div class="case reveal">
+      <div class="case__img"></div>
+      <div class="case__body">
+        <span class="client">{{CLIENT_NAME}}</span>
+        <h3>{{CASE_TITLE}}</h3>
+        <p>{{EFFECT_SENTENCE}}</p>
+        <div class="case__metrics">
+          <div><span class="n">{{METRIC1_N}}</span><span class="l">{{METRIC1_L}}</span></div>
+          <div><span class="n">{{METRIC2_N}}</span><span class="l">{{METRIC2_L}}</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide__foot reveal"><span>{{CASE_TITLE}}</span><span class="pg">03</span></div>
+  </div>
+</section>
+<section class="slide" data-title="About">
+  <div class="slide__inner grid">
+    <div class="c-7">
+      <p class="kicker reveal"><span class="no">04</span> About us</p>
+      <h2 class="title reveal">{{ABOUT_TITLE}}</h2>
+      <p class="reveal">{{MECHANISM_SENTENCE}}</p>
+      <div class="stats">
+        <div class="stat reveal"><span class="n">{{STAT1_N}}<em>{{STAT1_E}}</em></span><span class="l">{{STAT1_L}}</span></div>
+        <div class="stat reveal"><span class="n">{{STAT2_N}}</span><span class="l">{{STAT2_L}}</span></div>
+        <div class="stat reveal"><span class="n"><em>{{STAT3_N}}</em></span><span class="l">{{STAT3_L}}</span></div>
+      </div>
+    </div>
+    <div class="slide__foot reveal"><span>About</span><span class="pg">04</span></div>
+  </div>
+</section>
+<section class="slide" data-title="Contact">
+  <div class="slide__inner">
+    <p class="kicker reveal"><span class="no">→</span> Mari bicara</p>
+    <h1 class="hero reveal" style="max-width:18ch">{{THE_ONE_ASK}}</h1>
+    <p class="lead reveal">{{WHAT_HAPPENS_AFTER_THE_DECISION}}</p>
+    <div class="reveal" style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <span class="pill pill--accent">{{CONTACT_EMAIL}}</span>
+      <span class="pill">{{NEXT_REVIEW_DATE}}</span>
+    </div>
+    <div class="slide__foot reveal"><span>Terima kasih</span><span class="pg">05</span></div>
+  </div>
+</section>
+</main>
+<div class="overview" id="overview" hidden>
+  <h2>Semua slide</h2>
+  <div class="overview__grid" id="ovGrid"></div>
+</div>
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  var tot = document.getElementById('tot');
+  var overview = document.getElementById('overview');
+  var ovGrid = document.getElementById('ovGrid');
+  var btnOverview = document.getElementById('btnOverview');
+  var i = 0;
+  tot.textContent = slides.length;
+  slides.forEach(function (s) {
+    s.querySelectorAll('.reveal').forEach(function (el, n) { el.style.setProperty('--i', n); });
+  });
+  function go(n, push) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+    cur.textContent = i + 1;
+    if (rail) rail.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (push !== false) history.replaceState(null, '', '#slide-' + (i + 1));
+    Array.prototype.forEach.call(ovGrid.children, function (c, k) {
+      c.setAttribute('aria-current', k === i ? 'true' : 'false');
+    });
+  }
+  slides.forEach(function (s, k) {
+    var b = document.createElement('button');
+    b.className = 'ov-card'; b.type = 'button';
+    b.innerHTML = '<span class="ov-card__n">' + String(k + 1).padStart(2, '0') + '</span><span class="ov-card__t"></span>';
+    b.lastChild.textContent = s.dataset.title || ('Slide ' + (k + 1));
+    b.addEventListener('click', function () { toggleOverview(false); go(k); });
+    ovGrid.appendChild(b);
+  });
+  function toggleOverview(force) {
+    var open = typeof force === 'boolean' ? force : overview.hidden;
+    overview.hidden = !open;
+  }
+  btnOverview.addEventListener('click', function () { toggleOverview(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') { toggleOverview(false); return; }
+    if (k === 'o' || k === 'O') { toggleOverview(); return; }
+    if (k === 'd' || k === 'D') {
+      var root = document.documentElement;
+      var now = root.getAttribute('data-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', now === 'dark' ? 'light' : 'dark');
+      return;
+    }
+    if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+      return;
+    }
+    if (!overview.hidden) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+  });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.hud, .overview, a, button')) return;
+    go(i + 1);
+  });
+  function fromHash(push) {
+    var m = /^#slide-(\d+)$/.exec(location.hash);
+    go(m ? parseInt(m[1], 10) - 1 : 0, push);
+  }
+  window.addEventListener('hashchange', function () { fromHash(false); });
+  fromHash(false);
+})();
+</script>
+</body>
+</html>
