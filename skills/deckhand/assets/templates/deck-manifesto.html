@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT}} — {{PERIOD}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600;1,9..144,900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* MANIFESTO (eks-Nietzsche) — brutalist manifesto mandiri.
+   Serif Fraunces raksasa, hard-shadow solid, radius 0 dipaksa,
+   satu warna merah, asterisk bullet, catatan pinggir. */
+:root{
+  color-scheme:light;
+  --ground:#f4f1ea; --surface:#ffffff;
+  --ink:#111111; --ink-soft:#333333; --muted:#77716a;
+  --line:#111111; --line-soft:rgba(17,17,17,.25);
+  --red:#d92d20; --red-soft:rgba(217,45,32,.10);
+  --pad-x:clamp(3rem,9vw,9rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --serif:"Fraunces",Georgia,serif;
+  --mono:"Space Mono",ui-monospace,monospace;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#141210; --surface:#1e1b18;
+  --ink:#f4f1ea; --ink-soft:#cdc8bf; --muted:#8a847b;
+  --line:#f4f1ea; --line-soft:rgba(244,241,234,.3);
+  --red:#ff5449; --red-soft:rgba(255,84,73,.12);
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0!important}
+html,body{height:100%}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--mono);font-size:15px;line-height:1.65;overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(rgba(0,0,0,.03) 1px,transparent 1px);
+  background-size:4px 4px;
+}
+::selection{background:var(--red);color:var(--ground)}
+.rail{position:fixed;inset:0 0 auto 0;height:4px;background:var(--line-soft);z-index:60}
+.rail__fill{height:100%;width:0;background:var(--red);transition:width .45s var(--ease)}
+.hud{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.4rem var(--pad-x) 0;pointer-events:none}
+.hud>*{pointer-events:auto}
+.hud__right{display:flex;gap:.7rem;align-items:center}
+.tag{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink);border:2px solid var(--line);padding:.4rem .7rem;background:var(--ground);
+  box-shadow:3px 3px 0 var(--line)}
+button.tag{cursor:pointer}
+button.tag:hover{background:var(--ink);color:var(--ground)}
+.count{box-shadow:none;border-color:var(--line-soft);color:var(--muted)}
+#deck{position:relative;height:100%;width:100%;z-index:2}
+.slide{position:absolute;inset:0;display:flex;align-items:center;
+  padding:5.5rem var(--pad-x) 4.5rem;opacity:0;visibility:hidden;
+  transition:opacity .4s var(--ease),visibility .4s}
+.slide.is-active{opacity:1;visibility:visible}
+.slide__inner{width:100%;max-width:1000px;margin:0 auto 0 0}
+.kicker{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--red);margin:0 0 1.4rem}
+.kicker::before{content:"* "}
+h1.hero{font-family:var(--serif);font-weight:900;
+  font-size:clamp(3rem,9vw,8rem);line-height:.9;letter-spacing:-.02em;margin:0 0 1.5rem;text-wrap:balance}
+h2.title{font-family:var(--serif);font-weight:900;
+  font-size:clamp(2rem,5vw,4.2rem);line-height:.96;letter-spacing:-.015em;margin:0 0 1.3rem}
+.lead{font-family:var(--mono);font-size:clamp(.95rem,1.5vw,1.2rem);color:var(--ink-soft);max-width:46ch;margin:0 0 1.5rem}
+p{color:var(--ink-soft);max-width:52ch}
+.scream{color:var(--red);font-style:italic}
+.mark{background:var(--red);color:var(--ground);padding:0 .18em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.strike{text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:var(--red);color:var(--muted)}
+.quote{border-left:6px solid var(--red);padding:.2rem 0 .2rem 1.8rem;margin:1.5rem 0;max-width:34ch}
+.quote p{font-family:var(--serif);font-style:italic;font-weight:600;
+  font-size:clamp(1.4rem,3vw,2.4rem);line-height:1.1;color:var(--ink);margin:0}
+.quote cite{display:block;margin-top:1rem;font-family:var(--mono);font-style:normal;
+  font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.box{background:var(--surface);border:2px solid var(--line);
+  box-shadow:6px 6px 0 var(--line);padding:1.6rem 1.7rem}
+.box h3{font-family:var(--serif);font-weight:900;font-size:1.3rem;margin:0 0 .6rem}
+.box .num{font-family:var(--serif);font-weight:900;font-size:2.6rem;color:var(--red);line-height:1;display:block;margin-bottom:.4rem}
+.box p{font-size:.86rem;margin:0}
+.boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:1.8rem}
+@media(max-width:900px){.boxes{grid-template-columns:1fr}}
+ul.manifesto{list-style:none;margin:1.4rem 0 0;padding:0;display:grid;gap:1.1rem;max-width:48ch}
+ul.manifesto li{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;color:var(--ink-soft)}
+ul.manifesto li::before{content:"*";font-family:var(--serif);font-weight:900;font-size:1.5rem;color:var(--red);line-height:1}
+.margin-note{font-family:var(--mono);font-size:.72rem;color:var(--muted);
+  border-top:2px solid var(--line);padding-top:.7rem;margin-top:2rem;max-width:40ch}
+.reveal{opacity:0;transform:translateY(16px)}
+.slide.is-active .reveal{animation:rise .6s var(--ease) forwards;animation-delay:calc(var(--i,0)*90ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+.overview{position:fixed;inset:0;z-index:70;background:rgba(244,241,234,.96);backdrop-filter:blur(8px);
+  padding:6rem var(--pad-x) 3rem;overflow:auto}
+.overview h2{font-family:var(--serif);font-weight:900;font-size:1.6rem;margin:0 0 1.6rem}
+.overview__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem}
+.ov-card{text-align:left;cursor:pointer;font-family:var(--mono);background:var(--surface);
+  border:2px solid var(--line);box-shadow:4px 4px 0 var(--line);padding:1.1rem 1.2rem;display:grid;gap:.5rem;min-height:104px;transition:transform .15s var(--ease)}
+.ov-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--line)}
+.ov-card[aria-current="true"]{background:var(--red);color:var(--ground);box-shadow:4px 4px 0 var(--line)}
+.ov-card[aria-current="true"] .ov-card__n{color:var(--ground)}
+.ov-card__n{font-size:.7rem;letter-spacing:.14em;color:var(--red)}
+.ov-card__t{font-family:var(--serif);font-weight:900;font-size:1rem;color:inherit}
+@page{size:A4 landscape;margin:12mm}
+@media print{
+  body{overflow:visible;background:#fff;color:#000;background-image:none}
+  .rail,.hud,.overview{display:none!important}
+  #deck{height:auto}
+  .slide{position:static;opacity:1!important;visibility:visible!important;height:auto;min-height:170mm;padding:0 0 10mm;break-after:page}
+  .reveal{opacity:1!important;transform:none!important;animation:none!important}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="rail"><div class="rail__fill" id="rail"></div></div>
+<header class="hud">
+  <span class="tag">{{PRODUCT}}</span>
+  <nav class="hud__right">
+    <button class="tag" id="btnOverview" type="button">Index [O]</button>
+    <span class="tag count"><span id="cur">1</span>/<span id="tot">1</span></span>
+  </nav>
+</header>
+<main id="deck">
+<section class="slide" data-title="Cover">
+  <div class="slide__inner">
+    <p class="kicker reveal">sebuah pitch · {{PERIOD}}</p>
+    <h1 class="hero reveal">{{HERO_LINE1}} <span class="scream">{{HERO_SCREAM}}</span></h1>
+    <p class="lead reveal">{{ONE_LINE_SUMMARY}}</p>
+    <p class="margin-note reveal">{{PRODUCT}} — untuk {{AUDIENCE}}. Tekan spasi untuk lanjut.</p>
+  </div>
+</section>
+<section class="slide" data-title="Masalah">
+  <div class="slide__inner">
+    <p class="kicker reveal">masalah</p>
+    <h2 class="title reveal">{{PROBLEM_TITLE_A}} <span class="mark">{{PROBLEM_MARK}}</span></h2>
+    <div class="quote reveal">
+      <p>{{QUOTE_TEXT}}</p>
+      <cite>— {{QUOTE_SRC}}</cite>
+    </div>
+    <p class="reveal">Yang lama: <span class="strike">{{OLD_ASSUMPTION}}</span>. Yang baru: <span class="scream">{{NEW_TRUTH}}</span></p>
+  </div>
+</section>
+<section class="slide" data-title="Tiga pilar">
+  <div class="slide__inner">
+    <p class="kicker reveal">cara kerja</p>
+    <h2 class="title reveal">Tiga pilar</h2>
+    <div class="boxes">
+      <div class="box reveal"><span class="num">01</span><h3>Framework</h3><p>{{ITEM_1}}</p></div>
+      <div class="box reveal"><span class="num">02</span><h3>Data</h3><p>{{ITEM_2}}</p></div>
+      <div class="box reveal"><span class="num">03</span><h3>Hipotesis</h3><p>{{ITEM_3}}</p></div>
+    </div>
+  </div>
+</section>
+<section class="slide" data-title="Traction">
+  <div class="slide__inner">
+    <p class="kicker reveal">traction</p>
+    <h2 class="title reveal"><span class="scream">{{TRACTION_N}}</span> {{TRACTION_L}}</h2>
+    <ul class="manifesto">
+      <li class="reveal"><span>{{EFFECT_SENTENCE}}</span></li>
+      <li class="reveal"><span>{{MECHANISM_SENTENCE}}</span></li>
+      <li class="reveal"><span>{{ITEM_4}}</span></li>
+    </ul>
+    <p class="margin-note reveal">diukur: {{HOW_IT_WAS_MEASURED}}</p>
+  </div>
+</section>
+<section class="slide" data-title="Penutup">
+  <div class="slide__inner">
+    <p class="kicker reveal">yang kami minta</p>
+    <h1 class="hero reveal" style="max-width:16ch">{{THE_ONE_ASK}}</h1>
+    <p class="lead reveal">{{WHAT_HAPPENS_AFTER_THE_DECISION}}</p>
+    <p class="margin-note reveal">{{NEXT_REVIEW_DATE}}</p>
+  </div>
+</section>
+</main>
+<div class="overview" id="overview" hidden>
+  <h2>Index</h2>
+  <div class="overview__grid" id="ovGrid"></div>
+</div>
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  var tot = document.getElementById('tot');
+  var overview = document.getElementById('overview');
+  var ovGrid = document.getElementById('ovGrid');
+  var btnOverview = document.getElementById('btnOverview');
+  var i = 0;
+  tot.textContent = slides.length;
+  slides.forEach(function (s) {
+    s.querySelectorAll('.reveal').forEach(function (el, n) { el.style.setProperty('--i', n); });
+  });
+  function go(n, push) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+    cur.textContent = i + 1;
+    if (rail) rail.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (push !== false) history.replaceState(null, '', '#slide-' + (i + 1));
+    Array.prototype.forEach.call(ovGrid.children, function (c, k) {
+      c.setAttribute('aria-current', k === i ? 'true' : 'false');
+    });
+  }
+  slides.forEach(function (s, k) {
+    var b = document.createElement('button');
+    b.className = 'ov-card'; b.type = 'button';
+    b.innerHTML = '<span class="ov-card__n">' + String(k + 1).padStart(2, '0') + '</span><span class="ov-card__t"></span>';
+    b.lastChild.textContent = s.dataset.title || ('Slide ' + (k + 1));
+    b.addEventListener('click', function () { toggleOverview(false); go(k); });
+    ovGrid.appendChild(b);
+  });
+  function toggleOverview(force) {
+    var open = typeof force === 'boolean' ? force : overview.hidden;
+    overview.hidden = !open;
+  }
+  btnOverview.addEventListener('click', function () { toggleOverview(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') { toggleOverview(false); return; }
+    if (k === 'o' || k === 'O') { toggleOverview(); return; }
+    if (k === 'd' || k === 'D') {
+      var root = document.documentElement;
+      var now = root.getAttribute('data-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', now === 'dark' ? 'light' : 'dark');
+      return;
+    }
+    if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+      return;
+    }
+    if (!overview.hidden) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+  });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.hud, .overview, a, button')) return;
+    go(i + 1);
+  });
+  function fromHash(push) {
+    var m = /^#slide-(\d+)$/.exec(location.hash);
+    go(m ? parseInt(m[1], 10) - 1 : 0, push);
+  }
+  window.addEventListener('hashchange', function () { fromHash(false); });
+  fromHash(false);
+})();
+</script>
+</body>
+</html>
