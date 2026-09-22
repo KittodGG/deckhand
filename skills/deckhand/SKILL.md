@@ -106,6 +106,16 @@ across templates. Placeholder `{{...}}` yang sama dipakai di semua template
 (`{{PRODUCT}}`, `{{ONE_LINE_SUMMARY}}`, `{{ITEM_1..4}}`, `{{THE_ONE_ASK}}`,
 dll) supaya agent tinggal ganti isi tanpa merestrukturisasi slide.
 
+**Jangan pernah menebak Gaya.** Kalau prompt user tidak menyebut gaya visual
+sama sekali (tidak ada kata seperti "editorial", "terminal", "pitch",
+"agency", "manifesto", "swiss", "galaxy", "nietzsche", atau nama file
+template), TAWARKAN ketujuh opsi di tabel di atas — lengkap dengan satu baris
+ciri tiap opsi dan link ke galeri `README.md` — lalu TUNGGU jawaban user
+sebelum membangun. `Editorial` hanya dipakai diam-diam kalau user menjawab
+"terserah"/"bebas"/"pilih yang terbaik", dan itu pun katakan dalam satu baris
+("Pakai Editorial karena ..."). Aturan yang sama berlaku untuk Scope,
+Audience, Language, dan Theme: tidak disebut = ditanyakan, bukan diasumsikan.
+
 Also worth asking in the same message when the repo is ambiguous: which repo or
 subfolder. A monorepo with three apps needs to know which one is on stage.
 
