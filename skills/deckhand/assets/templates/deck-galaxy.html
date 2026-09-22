@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PRODUCT}} — Q{{QUARTER}} {{YEAR}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* GALAXY — corporate report. Surface selang-seling: hitam / putih / abu.
+   Aksen kuning. Type stagger di cover + wireframe isometric.
+   Meta kecil di pojok, footnote superscript. Surface fixed per slide. */
+:root{
+  --black:#0d0d0d; --white:#ffffff; --gray:#a3a3a3; --gray-ink:#8a8a8a;
+  --yellow:#f5d90a;
+  --pad:clamp(2.5rem,5vw,4.5rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --font:"Inter",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#000;color:#fff;font-family:var(--font);font-size:15px;line-height:1.55;
+  overflow:hidden;-webkit-font-smoothing:antialiased;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+::selection{background:var(--yellow);color:#000}
+
+/* shell */
+.rail{position:fixed;inset:0 0 auto 0;height:2px;background:rgba(255,255,255,.15);z-index:60}
+.rail__fill{height:100%;width:0;background:var(--yellow);transition:width .45s var(--ease)}
+.hud{position:fixed;inset:auto 0 1.2rem 0;z-index:50;display:flex;justify-content:flex-end;
+  gap:.5rem;padding:0 var(--pad);pointer-events:none}
+.hud>*{pointer-events:auto}
+.hbtn{font:500 .68rem/1 var(--font);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.35);padding:.4rem .7rem}
+.hbtn:hover{background:var(--yellow);color:#000;border-color:var(--yellow)}
+
+/* slide + surfaces */
+#deck{position:relative;height:100%}
+.slide{position:absolute;inset:0;background:var(--black);color:#fff;
+  padding:4.6rem var(--pad) 3.4rem;opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s}
+.slide.is-active{opacity:1;visibility:visible}
+.slide--white{background:var(--white);color:var(--black)}
+.slide--gray{background:var(--gray);color:#fff}
+.inner{max-width:1180px;margin:0 auto;height:100%;display:flex;flex-direction:column}
+
+/* meta pojok */
+.mtop{position:absolute;top:1.3rem;left:var(--pad);right:var(--pad);display:flex;gap:1.2rem;
+  align-items:baseline;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.mtop .no{font-weight:700}
+.mtop .rt{margin-left:auto;letter-spacing:.06em;text-transform:none}
+.mbot{position:absolute;bottom:1.2rem;left:var(--pad);font-size:.62rem;letter-spacing:.06em;opacity:.7}
+
+/* type */
+h1,h2{font-weight:700;letter-spacing:-.02em;margin:0 0 1rem}
+h1{font-size:clamp(2.4rem,5vw,4rem)}
+h2{font-size:clamp(1.8rem,3.6vw,2.9rem);font-weight:500}
+.lead{font-size:clamp(.9rem,1.3vw,1.05rem);max-width:64ch;opacity:.92;margin:0 0 1.6rem}
+.sub-y{color:var(--yellow);font-size:clamp(1.1rem,2vw,1.6rem);font-weight:500;
+  border-bottom:1px solid var(--yellow);padding-bottom:.55rem;margin:1.6rem 0 1rem;max-width:52ch}
+.slide--white .sub-y{color:#0d0d0d;border-color:#0d0d0d}
+.fn{font-size:.6rem;opacity:.6;margin-top:auto;padding-top:1.4rem}
+sup{font-size:.6em}
+
+/* cover stagger + wireframe */
+.cover{display:grid;grid-template-columns:1fr 1fr;align-items:center;flex:1}
+.q{font-size:clamp(5rem,13vw,10rem);font-weight:700;line-height:.85;letter-spacing:-.04em}
+.q .yr{display:block;margin:0 0 0 5.5rem;color:var(--gray-ink);font-size:.82em}
+.q .yr::before{content:"· ";font-size:.5em;vertical-align:.5em}
+.wire{width:100%;height:auto;color:#fff;opacity:.9}
+@media(max-width:900px){.cover{grid-template-columns:1fr}.wire{display:none}}
+
+/* snapshot: kolom stat + icon rows */
+.snap{display:grid;grid-template-columns:.8fr 1.6fr;gap:clamp(2rem,5vw,5rem);flex:1;align-content:start}
+.stcol{display:grid;gap:1.6rem}
+.stcol .n{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;line-height:1}
+.stcol .l{font-size:.72rem;opacity:.75;margin-top:.3rem;max-width:20ch}
+.irow{display:grid;grid-template-columns:52px 1fr;gap:1.1rem;padding:1.05rem 0;border-top:1px solid rgba(0,0,0,.18)}
+.irow:last-child{border-bottom:1px solid rgba(0,0,0,.18)}
+.ic{width:44px;height:44px;background:var(--black);color:#fff;display:grid;place-items:center}
+.ic svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6}
+.irow h3{margin:0 0 .3rem;font-size:.95rem;font-weight:700}
+.irow p{margin:0;font-size:.74rem;opacity:.8;max-width:56ch}
+@media(max-width:900px){.snap{grid-template-columns:1fr}}
+
+/* bullet kotak */
+ul.sq{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+ul.sq li{display:grid;grid-template-columns:10px 1fr;gap:.8rem;font-size:.82rem;opacity:.95}
+ul.sq li::before{content:"";width:6px;height:6px;background:currentColor;margin-top:.45em}
+
+/* bar chart kuning */
+.chart{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(2rem,4vw,4rem);flex:1;align-content:start}
+.brow{display:grid;grid-template-columns:150px 1fr 46px;gap:.9rem;align-items:center;margin-bottom:.7rem}
+.brow .bl{font-size:.7rem;text-align:right;opacity:.95}
+.brow .bt{height:10px;background:rgba(255,255,255,.25)}
+.brow .bf{display:block;height:100%;background:var(--yellow);transform-origin:left;transform:scaleX(0)}
+.slide.is-active .bf{animation:gx .8s var(--ease) .25s forwards}
+@keyframes gx{to{transform:scaleX(1)}}
+.brow .bv{font-size:.7rem;color:var(--yellow);font-weight:700}
+.ystat .n{font-size:clamp(2.2rem,4.4vw,3.4rem);font-weight:700;color:var(--yellow);line-height:1}
+.ystat .l{font-size:.74rem;opacity:.9;margin:.2rem 0 1.2rem;max-width:26ch}
+.orb{width:150px;height:150px;border-radius:50%;background:var(--black);color:#fff;
+  display:grid;place-content:center;text-align:center;padding:1rem;margin-top:.6rem}
+.orb .n{font-size:1.7rem;font-weight:700}
+.orb .l{font-size:.62rem;opacity:.8;margin-top:.2rem}
+@media(max-width:900px){.chart{grid-template-columns:1fr}}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(10px)}
+.slide.is-active .reveal{animation:rise .45s var(--ease) forwards;animation-delay:calc(var(--i,0)*60ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* overview */
+.overview{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.93);padding:5rem var(--pad) 3rem;overflow:auto}
+.overview h2{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:#999;margin:0 0 1.4rem}
+.overview__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem}
+.ov-card{text-align:left;cursor:pointer;font-family:var(--font);background:#111;color:#fff;
+  border:1px solid rgba(255,255,255,.2);padding:1rem;display:grid;gap:.5rem;min-height:96px}
+.ov-card:hover,.ov-card[aria-current="true"]{border-color:var(--yellow);color:var(--yellow)}
+.ov-card__n{font-size:.66rem;letter-spacing:.12em}
+.ov-card__t{font-size:.9rem;font-weight:500;color:inherit}
+
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  body{overflow:visible}
+  .rail,.hud,.overview{display:none!important}
+  #deck{height:auto}
+  .slide{position:static;opacity:1!important;visibility:visible!important;height:auto;min-height:160mm;break-after:page}
+  .reveal{opacity:1!important;transform:none!important;animation:none!important}
+  .bf{transform:none!important}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}.bf{transform:none}}
+</style>
+</head>
+<body>
+<div class="rail"><div class="rail__fill" id="rail"></div></div>
+<header class="hud">
+  <button class="hbtn" id="btnOverview" type="button">Index [O]</button>
+  <span class="hbtn"><span id="cur">1</span>/<span id="tot">1</span></span>
+</header>
+
+<main id="deck">
+
+<!-- 1 · COVER (hitam): type stagger + wireframe isometric -->
+<section class="slide" data-title="Cover">
+  <div class="mtop"><span class="no">1</span><span>galaxy</span><span class="rt">galaxy.com</span></div>
+  <div class="inner cover">
+    <div class="q reveal">Q{{QUARTER}}<span class="yr">{{YEAR2}}</span></div>
+    <svg class="wire reveal" viewBox="0 0 420 340" aria-hidden="true">
+      <defs><g id="cb" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M0 34 L60 0 L120 34 L60 68 Z"/><path d="M0 34 V102 L60 136 V68 Z"/><path d="M120 34 V102 L60 136 V68 Z"/>
+        <path d="M0 56 L60 90 M0 78 L60 112 M120 56 L60 90 M120 78 L60 112" opacity=".45"/>
+      </g></defs>
+      <use href="#cb" x="150" y="30"/><use href="#cb" x="60" y="140"/><use href="#cb" x="240" y="140"/>
+      <ellipse cx="120" cy="52" rx="34" ry="13" transform="rotate(-24 120 52)"/>
+      <ellipse cx="132" cy="78" rx="25" ry="10" transform="rotate(-24 132 78)" opacity=".7"/>
+      <circle cx="212" cy="112" r="3" fill="currentColor"/>
+      <circle cx="92" cy="26" r="2.5"/>
+    </svg>
+  </div>
+  <div class="mbot">As of {{DATE_ASOF}}</div>
+</section>
+
+<!-- 2 · SNAPSHOT (putih): kolom stat + icon rows -->
+<section class="slide slide--white" data-title="Company snapshot">
+  <div class="mtop"><span class="no">2</span><span>galaxy</span></div>
+  <div class="inner">
+    <h1 class="reveal">Company Snapshot</h1>
+    <p class="lead reveal">{{ONE_LINE_SUMMARY}} We serve a diversified client base, including institutions, startups, and qualified individuals.</p>
+    <div class="snap">
+      <div class="stcol">
+        <div class="reveal"><div class="n">{{STAT1_N}}</div><div class="l">{{STAT1_L}}</div></div>
+        <div class="reveal"><div class="n">{{STAT2_N}}</div><div class="l">{{STAT2_L}}</div></div>
+        <div class="reveal"><div class="n">{{STAT3_N}}</div><div class="l">{{STAT3_L}}</div></div>
+      </div>
+      <div>
+        <div class="irow reveal"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+          <div><h3>{{BIZ1_T}}</h3><p>{{BIZ1_D}}</p></div></div>
+        <div class="irow reveal"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></span>
+          <div><h3>{{BIZ2_T}}</h3><p>{{BIZ2_D}}</p></div></div>
+        <div class="irow reveal"><span class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></svg></span>
+          <div><h3>{{BIZ3_T}}</h3><p>{{BIZ3_D}}</p></div></div>
+      </div>
+    </div>
+    <p class="fn">1. {{FOOTNOTE_1}}</p>
+  </div>
+</section>
+
+<!-- 3 · PARADIGM (abu): sub-headline kuning + bullet kotak -->
+<section class="slide slide--gray" data-title="Paradigm">
+  <div class="mtop"><span class="no">3</span><span>galaxy</span></div>
+  <div class="inner">
+    <h1 class="reveal">A New Economic Paradigm</h1>
+    <p class="lead reveal">{{PARADIGM_LEAD}}</p>
+    <p class="sub-y reveal">{{SUBHEAD_Y1}}</p>
+    <ul class="sq">
+      <li class="reveal">{{POINT_1}}</li>
+      <li class="reveal">{{POINT_2}}</li>
+      <li class="reveal">{{POINT_3}}</li>
+    </ul>
+    <p class="sub-y reveal">{{SUBHEAD_Y2}}</p>
+    <ul class="sq">
+      <li class="reveal">{{POINT_4}}</li>
+      <li class="reveal">{{POINT_5}}</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4 · ADOPTION (abu): bar chart kuning + orb stat -->
+<section class="slide slide--gray" data-title="Adoption">
+  <div class="mtop"><span class="no">4</span><span>galaxy</span></div>
+  <div class="inner">
+    <h1 class="reveal">Crypto adoption is a global phenomenon</h1>
+    <div class="chart">
+      <div class="reveal">
+        <div class="brow"><span class="bl">{{ROW1_L}}</span><span class="bt"><span class="bf" style="width:92%"></span></span><span class="bv">{{ROW1_V}}</span></div>
+        <div class="brow"><span class="bl">{{ROW2_L}}</span><span class="bt"><span class="bf" style="width:80%"></span></span><span class="bv">{{ROW2_V}}</span></div>
+        <div class="brow"><span class="bl">{{ROW3_L}}</span><span class="bt"><span class="bf" style="width:68%"></span></span><span class="bv">{{ROW3_V}}</span></div>
+        <div class="brow"><span class="bl">{{ROW4_L}}</span><span class="bt"><span class="bf" style="width:54%"></span></span><span class="bv">{{ROW4_V}}</span></div>
+        <div class="brow"><span class="bl">{{ROW5_L}}</span><span class="bt"><span class="bf" style="width:41%"></span></span><span class="bv">{{ROW5_V}}</span></div>
+      </div>
+      <div>
+        <div class="ystat reveal"><div class="n">{{KEY1_N}}</div><div class="l">{{KEY1_L}}</div></div>
+        <div class="ystat reveal"><div class="n">{{KEY2_N}}</div><div class="l">{{KEY2_L}}</div></div>
+        <div class="orb reveal"><div><span class="n">{{ORB_N}}</span><span class="l">{{ORB_L}}</span></div></div>
+      </div>
+    </div>
+    <p class="fn">2. {{FOOTNOTE_2}}</p>
+  </div>
+</section>
+
+<!-- 5 · CLOSE (hitam): satu pernyataan -->
+<section class="slide" data-title="Outlook">
+  <div class="mtop"><span class="no">5</span><span>galaxy</span></div>
+  <div class="inner" style="justify-content:center">
+    <h1 class="reveal" style="max-width:22ch">{{THE_ONE_ASK}}</h1>
+    <p class="lead reveal">{{WHAT_HAPPENS_AFTER_THE_DECISION}}</p>
+  </div>
+  <div class="mbot">{{NEXT_REVIEW_DATE}}</div>
+</section>
+
+</main>
+
+<div class="overview" id="overview" hidden>
+  <h2>Index</h2>
+  <div class="overview__grid" id="ovGrid"></div>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  var tot = document.getElementById('tot');
+  var overview = document.getElementById('overview');
+  var ovGrid = document.getElementById('ovGrid');
+  var btnOverview = document.getElementById('btnOverview');
+  var i = 0;
+  tot.textContent = slides.length;
+  slides.forEach(function (s) {
+    s.querySelectorAll('.reveal').forEach(function (el, n) { el.style.setProperty('--i', n); });
+  });
+  function go(n, push) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+    cur.textContent = i + 1;
+    if (rail) rail.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (push !== false) history.replaceState(null, '', '#slide-' + (i + 1));
+    Array.prototype.forEach.call(ovGrid.children, function (c, k) {
+      c.setAttribute('aria-current', k === i ? 'true' : 'false');
+    });
+  }
+  slides.forEach(function (s, k) {
+    var b = document.createElement('button');
+    b.className = 'ov-card'; b.type = 'button';
+    b.innerHTML = '<span class="ov-card__n">' + String(k + 1).padStart(2, '0') + '</span><span class="ov-card__t"></span>';
+    b.lastChild.textContent = s.dataset.title || ('Slide ' + (k + 1));
+    b.addEventListener('click', function () { toggleOverview(false); go(k); });
+    ovGrid.appendChild(b);
+  });
+  function toggleOverview(force) {
+    var open = typeof force === 'boolean' ? force : overview.hidden;
+    overview.hidden = !open;
+  }
+  btnOverview.addEventListener('click', function () { toggleOverview(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') { toggleOverview(false); return; }
+    if (k === 'o' || k === 'O') { toggleOverview(); return; }
+    if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+      return;
+    }
+    if (!overview.hidden) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+  });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.hud, .overview, a, button')) return;
+    go(i + 1);
+  });
+  function fromHash(push) {
+    var m = /^#slide-(\d+)$/.exec(location.hash);
+    go(m ? parseInt(m[1], 10) - 1 : 0, push);
+  }
+  window.addEventListener('hashchange', function () { fromHash(false); });
+  fromHash(false);
+})();
+</script>
+</body>
+</html>
