@@ -1,0 +1,32 @@
+<!-- widgets/interactive-diff.html — deck tokens only -->
+<template id="interactive-diff-template">
+  <div class="idiff" data-widget="interactive-diff">
+    <div class="idiff-file" data-inject="file">file</div>
+    <div class="idiff-cols"><pre class="idiff-before"></pre><pre class="idiff-after"></pre></div>
+  </div>
+</template>
+<style>
+.idiff{color:var(--ink);font-family:inherit}
+.idiff-file{font-size:.8rem;color:var(--muted);margin-bottom:.6rem;font-variant-numeric:tabular-nums}
+.idiff-cols{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+@media(max-width:700px){.idiff-cols{grid-template-columns:1fr}}
+.idiff-cols pre{margin:0;padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:.8rem;line-height:1.6;overflow:auto;white-space:pre-wrap}
+.idiff-add{background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.idiff-del{background:color-mix(in srgb,var(--bad) 14%,transparent)}
+</style>
+<script>
+function initInteractiveDiff(container, data) {
+  function lines(el, arr, cls) {
+    el.innerHTML = '';
+    (arr || []).forEach(function (l) {
+      var s = document.createElement('div');
+      s.className = l.type === 'added' || l.type === 'deleted' ? (l.type === 'added' ? 'idiff-add' : 'idiff-del') : '';
+      s.textContent = l.num + '  ' + l.content;
+      el.appendChild(s);
+    });
+    void cls;
+  }
+  lines(container.querySelector('.idiff-before'), (data.before || {}).lines);
+  lines(container.querySelector('.idiff-after'), (data.after || {}).lines);
+}
+</script>

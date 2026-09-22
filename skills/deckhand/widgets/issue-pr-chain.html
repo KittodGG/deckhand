@@ -1,0 +1,31 @@
+<!-- widgets/issue-pr-chain.html — deck tokens only -->
+<template id="issue-pr-chain-template">
+  <div class="chain" data-widget="issue-pr-chain"><div class="chain-track"></div></div>
+</template>
+<style>
+.chain{color:var(--ink);font-family:inherit}
+.chain-track{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.chain-node{flex:1;min-width:140px;padding:1rem;border:1px solid var(--line);background:var(--surface);font-size:.85rem}
+.chain-node:first-child{border-radius:12px 0 0 12px} .chain-node:last-child{border-radius:0 12px 12px 0}
+.chain-node strong{display:block;color:var(--ink)} .chain-node span{color:var(--muted);font-size:.78rem}
+.chain-arrow{align-self:center;padding:0 .6rem;color:var(--accent);font-weight:800}
+.st-ok{color:var(--ok)} .st-warn{color:var(--warn)}
+</style>
+<script>
+function initIssuePrChain(container, data) {
+  var track = container.querySelector('.chain-track'); track.innerHTML = '';
+  function node(title, sub, status) {
+    var d = document.createElement('div'); d.className = 'chain-node';
+    d.innerHTML = '<strong></strong><span></span><div class="' + (status === 'merged' || status === 'closed' ? 'st-ok' : 'st-warn') + '">' + (status || '') + '</div>';
+    d.querySelector('strong').textContent = title; d.querySelector('span').textContent = sub;
+    return d;
+  }
+  if (data.issue) track.appendChild(node('#' + data.issue.number + ' ' + data.issue.title, 'issue', data.issue.status));
+  var a = document.createElement('div'); a.className = 'chain-arrow'; a.textContent = '→'; track.appendChild(a);
+  if (data.pr) track.appendChild(node('PR #' + data.pr.number + ' ' + data.pr.title, 'pull request', data.pr.status));
+  var a2 = document.createElement('div'); a2.className = 'chain-arrow'; a2.textContent = '→'; track.appendChild(a2);
+  var c = document.createElement('div'); c.className = 'chain-node';
+  c.innerHTML = '<strong>' + (data.commits || []).length + ' commits</strong><span>' + (data.commits || []).map(function (x) { return x.sha.slice(0, 7); }).join(', ') + '</span>';
+  track.appendChild(c);
+}
+</script>

@@ -1,0 +1,35 @@
+<!-- widgets/code-ownership-map.html — deck tokens only -->
+<template id="code-ownership-map-template">
+  <div class="ownmap" data-widget="code-ownership-map"><div class="own-grid"></div><div class="own-legend"></div></div>
+</template>
+<style>
+.ownmap{color:var(--ink);font-family:inherit}
+.own-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.5rem}
+.own-cell{border:1px solid var(--line);border-radius:10px;padding:.6rem;background:var(--surface);font-size:.75rem;cursor:pointer}
+.own-cell:hover{border-color:var(--accent)}
+.own-cell .f{font-weight:700;color:var(--ink);word-break:break-all}
+.own-cell .o{color:var(--muted);margin-top:.2rem}
+.own-legend{display:flex;gap:.6rem;margin-top:.8rem;font-size:.75rem;color:var(--muted);flex-wrap:wrap}
+.own-swatch{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:.3rem;vertical-align:baseline}
+</style>
+<script>
+function initCodeOwnershipMap(container, data) {
+  var grid = container.querySelector('.own-grid'), legend = container.querySelector('.own-legend');
+  var owners = data.owners || [], files = (data.files || []).slice(0, 24);
+  function col(id) {
+    var o = owners.find(function (x) { return x.id === id; });
+    var kind = (o && o.kind) || 'accent';
+    return kind === 'counter' ? 'var(--counter)' : kind === 'muted' ? 'var(--muted)' : 'var(--accent)';
+  }
+  grid.innerHTML = '';
+  files.forEach(function (f) {
+    var d = document.createElement('div'); d.className = 'own-cell';
+    d.style.borderTop = '3px solid ' + col(f.owner);
+    d.innerHTML = '<div class="f">' + f.path + '</div><div class="o">' + f.owner + '</div>';
+    grid.appendChild(d);
+  });
+  legend.innerHTML = owners.slice(0, 8).map(function (o) {
+    return '<span><span class="own-swatch" style="background:' + col(o.id) + '"></span>' + o.id + '</span>';
+  }).join('');
+}
+</script>

@@ -1,0 +1,28 @@
+<!-- widgets/branch-explorer.html — deck tokens only -->
+<template id="branch-explorer-template">
+  <div class="branches" data-widget="branch-explorer"><div class="branch-list"></div><div class="branch-detail">Pilih branch.</div></div>
+</template>
+<style>
+.branches{color:var(--ink);font-family:inherit;display:grid;gap:1rem}
+.branch-list{display:flex;gap:.5rem;flex-wrap:wrap}
+.branch-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:999px;padding:.4rem .9rem;font-size:.82rem;cursor:pointer}
+.branch-btn.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.branch-detail{border:1px solid var(--line);border-radius:12px;padding:1rem;background:var(--surface);font-size:.88rem;color:var(--ink-soft)}
+.branch-detail code{font-variant-numeric:tabular-nums}
+</style>
+<script>
+function initBranchExplorer(container, data) {
+  var list = container.querySelector('.branch-list'), detail = container.querySelector('.branch-detail');
+  (data.branches || []).forEach(function (b, i) {
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'branch-btn' + (i === 0 ? ' on' : ''); btn.textContent = b.name;
+    btn.addEventListener('click', function () {
+      list.querySelectorAll('.branch-btn').forEach(function (x) { x.classList.remove('on'); });
+      btn.classList.add('on');
+      detail.innerHTML = '<strong>' + b.name + '</strong><br>' + (b.commits || []).map(function (c) { return '<code>' + c.sha.slice(0, 7) + '</code> ' + c.message; }).join('<br>');
+    });
+    list.appendChild(btn);
+  });
+  var first = list.querySelector('.branch-btn'); if (first) first.click();
+}
+</script>

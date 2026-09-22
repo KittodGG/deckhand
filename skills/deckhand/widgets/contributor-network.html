@@ -1,0 +1,42 @@
+<!-- widgets/contributor-network.html — deck tokens only -->
+<template id="contributor-network-template">
+  <div class="cnet" data-widget="contributor-network"><svg class="cnet-svg" viewBox="0 0 400 260" role="img" aria-label="Contributor network"></svg><div class="cnet-info">Hover / klik node.</div></div>
+</template>
+<style>
+.cnet{color:var(--ink);font-family:inherit}
+.cnet-svg{width:100%;height:260px}
+.cnet-node{fill:var(--surface);stroke:var(--accent);stroke-width:2;cursor:pointer}
+.cnet-edge{stroke:var(--line-strong);stroke-width:1.5}
+.cnet-label{fill:var(--ink);font-size:11px;text-anchor:middle}
+.cnet-info{font-size:.82rem;color:var(--muted);margin-top:.5rem}
+</style>
+<script>
+function initContributorNetwork(container, data) {
+  var svg = container.querySelector('.cnet-svg'), info = container.querySelector('.cnet-info');
+  var NS = 'http://www.w3.org/2000/svg', nodes = data.nodes || [], edges = data.edges || [];
+  var max = Math.max.apply(null, nodes.map(function (n) { return n.commits; }).concat([1]));
+  var pos = {};
+  nodes.forEach(function (n, i) {
+    var x = 60 + (i % 4) * 95, y = 70 + Math.floor(i / 4) * 110;
+    pos[n.id] = { x: x, y: y };
+  });
+  edges.forEach(function (e) {
+    if (!pos[e.source] || !pos[e.target]) return;
+    var l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', pos[e.source].x); l.setAttribute('y1', pos[e.source].y);
+    l.setAttribute('x2', pos[e.target].x); l.setAttribute('y2', pos[e.target].y);
+    l.setAttribute('class', 'cnet-edge'); l.style.strokeWidth = 1 + (e.weight || 1) / 5;
+    svg.appendChild(l);
+  });
+  nodes.forEach(function (n) {
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', pos[n.id].x); c.setAttribute('cy', pos[n.id].y);
+    c.setAttribute('r', 10 + (n.commits / max) * 18); c.setAttribute('class', 'cnet-node');
+    c.addEventListener('click', function () { info.textContent = n.id + ' — ' + n.commits + ' commits' + (n.role ? ' · ' + n.role : ''); });
+    svg.appendChild(c);
+    var t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', pos[n.id].x); t.setAttribute('y', pos[n.id].y + 34); t.setAttribute('class', 'cnet-label'); t.textContent = n.id;
+    svg.appendChild(t);
+  });
+}
+</script>
