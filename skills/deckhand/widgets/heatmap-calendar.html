@@ -1,0 +1,32 @@
+<!-- widgets/heatmap-calendar.html — deck tokens only (accent steps, bukan green GitHub) -->
+<template id="heatmap-calendar-template">
+  <div class="heatmap-calendar" data-widget="heatmap-calendar"><div class="heatmap-grid"></div><div class="heatmap-legend"><span>Less</span><div class="legend-cells"></div><span>More</span></div></div>
+</template>
+<style>
+.heatmap-calendar{color:var(--ink);font-family:inherit}
+.heatmap-grid{display:grid;grid-template-columns:repeat(26,12px);grid-auto-rows:12px;gap:3px}
+.heatmap-cell{width:12px;height:12px;border-radius:2px;background:var(--line);cursor:pointer;border:none;padding:0}
+.heatmap-legend{display:flex;align-items:center;gap:.5rem;margin-top:1rem;font-size:.72rem;color:var(--muted)}
+.legend-cells{display:flex;gap:3px}
+.legend-cell{width:12px;height:12px;border-radius:2px;background:var(--line)}
+</style>
+<script>
+function initHeatmapCalendar(container, data) {
+  var grid = container.querySelector('.heatmap-grid'), legend = container.querySelector('.legend-cells');
+  var days = data.days || [], max = Math.max.apply(null, days.map(function (d) { return d.count; }).concat([1]));
+  days.slice(0, 182).forEach(function (d) {
+    var c = document.createElement('button');
+    c.className = 'heatmap-cell'; c.title = d.date + ': ' + d.count;
+    c.setAttribute('aria-label', d.date + ': ' + d.count);
+    var t = d.count === 0 ? 0 : 0.15 + (d.count / max) * 0.85;
+    c.style.background = d.count === 0 ? 'var(--line)' : 'color-mix(in srgb, var(--accent) ' + Math.round(t * 100) + '%, var(--surface))';
+    c.addEventListener('click', function () { c.dispatchEvent(new CustomEvent('widget:drill', { bubbles: true, detail: d })); });
+    grid.appendChild(c);
+  });
+  for (var i = 0; i < 5; i++) {
+    var l = document.createElement('div'); l.className = 'legend-cell';
+    if (i > 0) l.style.background = 'color-mix(in srgb, var(--accent) ' + (i * 22) + '%, var(--surface))';
+    legend.appendChild(l);
+  }
+}
+</script>

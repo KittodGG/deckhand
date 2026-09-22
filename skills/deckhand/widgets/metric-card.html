@@ -1,0 +1,32 @@
+<!-- widgets/metric-card.html — theme: var(--...) deck only -->
+<template id="metric-card-template">
+  <div class="metric-card" data-widget="metric-card">
+    <div class="metric-value" data-inject="value">0</div>
+    <div class="metric-label" data-inject="label">Metric</div>
+    <div class="metric-trend" data-inject="trend">—</div>
+    <svg class="metric-sparkline" width="120" height="30" aria-hidden="true"></svg>
+  </div>
+</template>
+<style>
+.metric-card{padding:1.2rem 1.3rem;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);box-shadow:var(--shadow-card);font-family:inherit;color:var(--ink)}
+.metric-value{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--accent)}
+.metric-label{font-size:.85rem;color:var(--muted);margin-top:.3rem}
+.metric-trend{font-size:.85rem;margin-top:.6rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.metric-sparkline{display:block;margin-top:.6rem;width:120px;height:30px}
+</style>
+<script>
+function initMetricCard(container, data) {
+  if (data.sparkline) {
+    var svg = container.querySelector('.metric-sparkline');
+    var w = 120, h = 30, max = Math.max.apply(null, data.sparkline), min = Math.min.apply(null, data.sparkline), rg = (max - min) || 1;
+    var pts = data.sparkline.map(function (v, i) {
+      return ((i / (data.sparkline.length - 1)) * w) + ',' + (h - ((v - min) / rg) * h);
+    }).join(' ');
+    svg.innerHTML = '<polyline points="' + pts + '" fill="none" stroke="var(--accent)" stroke-width="2"/>';
+  }
+  if (data.enableDrillDown !== false) {
+    container.style.cursor = 'pointer';
+    container.addEventListener('click', function () { container.dispatchEvent(new CustomEvent('widget:drill', { bubbles: true })); });
+  }
+}
+</script>

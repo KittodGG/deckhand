@@ -1,0 +1,33 @@
+<!-- widgets/timeline-scrubber.html — deck tokens only -->
+<template id="timeline-scrubber-template">
+  <div class="timeline-scrubber" data-widget="timeline-scrubber">
+    <input type="range" class="tl-range" min="0" max="100" value="100" aria-label="Filter range">
+    <div class="tl-events"></div><div class="tl-detail">Klik event untuk detail.</div>
+  </div>
+</template>
+<style>
+.timeline-scrubber{color:var(--ink);font-family:inherit}
+.tl-range{width:100%;accent-color:var(--accent)}
+.tl-events{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.tl-event{width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;border:none;padding:0}
+.tl-event.dim{opacity:.2}
+.tl-detail{padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:.9rem;color:var(--ink-soft);min-height:56px}
+</style>
+<script>
+function initTimelineScrubber(container, data) {
+  var ev = container.querySelector('.tl-events'), detail = container.querySelector('.tl-detail'), range = container.querySelector('.tl-range');
+  var events = data.events || [];
+  function render(cut) {
+    ev.innerHTML = '';
+    events.forEach(function (e, i) {
+      var b = document.createElement('button');
+      b.className = 'tl-event' + (i / Math.max(1, events.length - 1) * 100 > cut ? ' dim' : '');
+      b.title = e.title; b.setAttribute('aria-label', e.title);
+      b.addEventListener('click', function () { detail.innerHTML = '<strong>' + e.title + '</strong><br>' + (e.date || '') + ' · ' + (e.author || '') + '<br>' + (e.details || ''); });
+      ev.appendChild(b);
+    });
+  }
+  range.addEventListener('input', function () { render(Number(range.value)); });
+  render(100);
+}
+</script>
