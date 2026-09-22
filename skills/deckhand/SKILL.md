@@ -147,37 +147,65 @@ type-facing: "Approval flow now survives a rejected step" beats "12 fixes".
 run, or a benchmark you actually executed. If you want to claim something got
 faster, measure it or drop the claim.
 
-### Read the issues the commits point at
+### Read the GitHub issues behind the changes
 
 A commit message says what changed. The issue behind it says why it had to
 change, who reported it, what it broke, and what "done" meant. That is exactly
 the half a progress deck needs and the half git alone cannot give you. Teams
-that open an issue before every fix are handing you the narrative for free.
+that open an issue before every fix — issue first, code second — are handing
+you the narrative for free: the issue body is the spec of the problem, the
+commits are the proof it was handled.
 
-The script's `## ISSUE REFS` section lists the numbers. For each one that will
-reach a slide:
+Sweep three sources, but ONLY if the repo actually has issues. Check first:
 
 ```bash
-gh issue view <number> --json number,title,body,labels,state,closedAt
-gh issue list --state closed --search "closed:>=2026-08-01" --json number,title,labels
+gh issue list --limit 1 --json number
 ```
 
-Pull out: the reported symptom in the reporter's own words, the root cause if it
-was written down, the labels (they usually carry severity and area), and whether
-it is actually closed. Then use it like this:
+If that errors (`gh` missing, not authenticated, not a GitHub repo) or returns
+nothing, say so in one line and continue from git alone. Do not stall the deck
+on it, and never invent an issue's contents.
+
+When issues exist, collect:
+
+1. **Referenced by commits** — the script's `## ISSUE REFS` section lists the
+   numbers. This is the main mapping: issue → the commits that closed it →
+   one theme slide.
+2. **Closed in the scope window** — catches fixes that never wrote `#123` in
+   the message. Use the scope's start date (`--since` value directly; for
+   `--count N` use the oldest commit's date:
+   `git log -N --format=%ad --date=short | tail -1`; for `--range` use the
+   base ref's date):
+
+   ```bash
+   gh issue list --state closed --search "closed:>=2026-08-01" --json number,title,labels,closedAt
+   ```
+
+3. **Still open in scope** — issues whose commits are merged but which never
+   closed are partial fixes: they belong on the open-items slide, not the
+   shipped list. Open issues with recent activity are also candidates for the
+   recommendations slide.
+
+For each issue that will reach a slide:
+
+```bash
+gh issue view <number> --json number,title,body,labels,state,closedAt,comments
+```
+
+Pull out: the reported symptom in the reporter's own words, the root cause if
+it was written down, the labels (they usually carry severity and area), the
+acceptance criteria if the body lists any (that is your "what done meant"
+line), and whether it is actually closed. Then use it like this:
 
 - The issue's symptom becomes the "why it mattered" line on the theme slide.
 - The reporter's phrasing is better plain-language copy than anything you would
   write. Borrow it.
-- An issue still open while its commits are merged is a partial fix, and belongs
-  on the open-items slide, not the shipped list.
+- Comments sometimes hold the decision (why fix A was chosen over fix B) —
+  that is one honest sentence on the slide.
 - Labels feed the priority ranking on the recommendations slide.
 
 Cite issue numbers on the slide only for an engineering audience. `#412` means
 nothing to a manager; the sentence from its body means everything.
-
-If `gh` is missing or unauthenticated, say so in one line and continue from git
-alone. Do not stall the deck on it, and do not invent an issue's contents.
 
 ## Step 3 — Read the project's identity
 
